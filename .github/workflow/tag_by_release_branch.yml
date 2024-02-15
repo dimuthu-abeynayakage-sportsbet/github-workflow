@@ -1,5 +1,5 @@
 name: Merge branch to master
-run-name: Merge ${{ github.head_ref }} to master (hotfix) 🏷️
+run-name: Merge ${{ github.head_ref }} to master (release/1.2.0) 🏷️
 on:
   pull_request:
     types:
