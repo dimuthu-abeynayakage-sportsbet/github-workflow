@@ -1,5 +1,5 @@
 name: "Open PR's"
-run-name: Find open pull requests 🏷️
+run-name: Find open pull requests v1 🏷️
 on: push
   # schedule:
   #  - cron: "*/15 * * * *"
