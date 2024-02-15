@@ -8,13 +8,15 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Testing"
-      - name: list all closed pull requests in last 24 hours
-        id: list
-        uses: buildsville/list-pull-requests@v1
-        with:
-          token: ${{secrets.GITHUB_TOKEN}}
-          #labels: '["WFR"]'
-          #skip_hour: '24'
-      - name: output
-        run: echo '${{ steps.list.outputs.pulls }}'
+    - uses: actions/checkout@v4
+    # Find the PR associated with this push, if there is one.
+    - uses: jwalton/gh-find-current-pr@master
+      id: findPr
+      with:
+      # Can be "open", "closed", or "all".  Defaults to "open".
+        state: open
+    # This will echo "Your PR is 7", or be skipped if there is no current PR.
+    - run: echo "Your PR is ${PR}"
+    if: success() && steps.findPr.outputs.number
+    env:
+      PR: ${{ steps.findPr.outputs.pr }}
