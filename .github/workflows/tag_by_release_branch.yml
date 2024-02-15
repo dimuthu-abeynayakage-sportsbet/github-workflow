@@ -67,17 +67,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: [extract-tag-in-branch, find-next-tag-by-branch]
     steps:
+      - name: Initiating Next Tag Creation
+        uses: actions/checkout@v4
       - env:
           BRANCH_TAG: ${{needs.extract-tag-in-branch.outputs.TAG_NAME}}
           NEXT_TAG: ${{needs.find-next-tag-by-branch.outputs.NEXT_TAG_NAME}}
-        run: |
+      - run: |
           RELEASING_TAG=$([ $BRANCH_TAG ] && echo "$BRANCH_TAG" || echo "$NEXT_TAG")
           echo "Next Tag - $RELEASING_TAG"
-      - name: Initiating Next Tag Creation
-        uses: actions/checkout@v4
-      - name: Create Next Tag
-        run: |
           git config --global user.name ${{ github.triggering_actor }}
           git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
           git tag $RELEASING_TAG
           git push --tags
+          
