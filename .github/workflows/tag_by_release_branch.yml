@@ -40,10 +40,10 @@ jobs:
         id: branch_release
         run: |
            BRANCH="${{ github.head_ref }}" 
-           if [[ $BRANCH == release ]]; then 
+           if [[ $BRANCH == 'release' ]]; then 
             echo "Identifyed as RELEASE, minor"
             echo "RELEASE_TYPE=minor" >> $GITHUB_OUTPUT
-           elif [[ $BRANCH == hotfix ]]; then 
+           elif [[ $BRANCH == 'hotfix/' ]]; then 
             echo "Identifyed as HOTFIX, patch"
             echo "RELEASE_TYPE=patch" >> $GITHUB_OUTPUT
            else 
@@ -72,4 +72,10 @@ jobs:
           NEXT_TAG: ${{needs.find-next-tag-by-branch.outputs.NEXT_TAG_NAME}}
         run: |
           RELEASING_TAG=$([ $BRANCH_TAG ] && echo "$BRANCH_TAG" || echo "$NEXT_TAG")
-          echo "Taging- $RELEASING_TAG"
+          echo "Next Tag - $RELEASING_TAG"
+      - name: Create Next Tag
+        run: |
+          git config --global user.name ${{ github.triggering_actor }}
+          git config --global user.email engineering@sportsbet.com.au
+          git tag $RELEASING_TAG
+          git push --tags
