@@ -38,7 +38,7 @@ jobs:
           
           title=$(_jq '.title')
           url=$(_jq '.url')
-          ALL_PR_MESSAGES+="${•<$url|$title>}"
+          ALL_PR_MESSAGES+="•<$url|$title>\n"
           # Utilize your variables
          # echo "title ======> $title"
          # echo "url ======> $url"
