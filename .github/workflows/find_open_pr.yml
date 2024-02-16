@@ -30,10 +30,11 @@ jobs:
       run: |
         #echo "OPEN_PULL_REQUESTS - $OPEN_PULL_REQUESTS"
         echo "Current Repo - ${{ github.event.repository.name }}"
-          for i in "${OPEN_PULL_REQUESTS[@]}"
-          do
-           echo "-----> $i"
-           echo
-          done
+        for row in $(echo "${jsonData}" | jq -r '.[] | @base64'); do
+          _jq() {
+            echo ${row} | base64 --decode | jq -r ${1}
+          }
+          echo "title ====== $(_jq '.title')"
+        done
         
 
