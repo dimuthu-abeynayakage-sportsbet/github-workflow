@@ -22,9 +22,9 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       run: | 
-        git config --global user.name ${{ github.triggering_actor }}
-        git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
+        #git config --global user.name ${{ github.triggering_actor }}
+        #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
         openPrs="$(gh pr list)"
-        echo "Prs: $openPrs"
+        echo 'Prs: $openPrs'
         
 
