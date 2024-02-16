@@ -1,5 +1,5 @@
 name: "Open PR's"
-run-name: Find open pull requests v5 🏷️
+run-name: Find open pull requests v6 🏷️
 on: push
   # schedule:
   #  - cron: "*/15 * * * *"
@@ -9,40 +9,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    # Find the PR associated with this push, if there is one.
-    #- uses: jwalton/gh-find-current-pr@master
-    #  id: findPr
-    #  with:
-      # Can be "open", "closed", or "all".  Defaults to "open".
-    #    state: open
-    # This will echo "Your PR is 7", or be skipped if there is no current PR.
-    #- run: echo "Your PR is ${PR}, ${{ steps.findPr.outputs.pr }}, ${{steps.findPr.outputs.number}}"
-    #- name: list all closed pull requests in last 24 hours
-    - name: Print Active PR's
-      run: | 
-        #git config --global user.name ${{ github.triggering_actor }}
-        #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
-        openPrs="$(gh pr list --json title,url)"
-        echo 'OPEN_PULL_REQUESTS='$openPrs >> $GITHUB_ENV
+   # - name: Print Active PR's
+   #   run: | 
+   #     openPrs="$(gh pr list --json title,url)"
+   #     echo 'OPEN_PULL_REQUESTS='$openPrs >> $GITHUB_ENV
       env:
         GH_TOKEN: ${{ github.token }}
-    - name: Print ----------- v1
+    - name: Colleting Open Pull Requests
       run: |
-        #echo "OPEN_PULL_REQUESTS - $OPEN_PULL_REQUESTS"
-        echo "Current Repo - ${{ github.event.repository.name }}"
+        #echo "Current Repo - ${{ github.event.repository.name }}"
+        openPrs="$(gh pr list --json title,url)"
+        echo 'OPEN_PULL_REQUESTS='$openPrs
         ALL_PR_MESSAGES=""
         for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
           _jq() {
             echo ${row} | base64 --decode | jq -r ${1}
           }
-          
           title=$(_jq '.title')
           url=$(_jq '.url')
-          ALL_PR_MESSAGES+="•<$url|$title>\n"
-          # Utilize your variables
-         # echo "title ======> $title"
-         # echo "url ======> $url"
+          ALL_PR_MESSAGES+="• <$url|$title>\n"
         done
         echo "For the Slack - $ALL_PR_MESSAGES"
+    - name: Send Slack Message
         
 
