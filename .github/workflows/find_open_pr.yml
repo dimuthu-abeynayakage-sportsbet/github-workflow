@@ -34,12 +34,12 @@ jobs:
         GH_TOKEN: ${{ github.token }}
     - name: Send Slack Message
       id: slack
-      uses: slackapi/slack-github-action@v1.25.0
+      uses: Sportsbet-Internal/slack-github-action@v1
       with:
+        bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
         channel-id: 'C06K1EC0N5B'
         payload: |
           {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests still open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${FORMATTED_PR_MESSAGES}"}}]}
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
+
         
 
