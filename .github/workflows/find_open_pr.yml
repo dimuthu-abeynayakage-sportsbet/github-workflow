@@ -30,6 +30,7 @@ jobs:
       run: |
         #echo "OPEN_PULL_REQUESTS - $OPEN_PULL_REQUESTS"
         echo "Current Repo - ${{ github.event.repository.name }}"
+        ALL_PR_MESSAGES=""
         for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
           _jq() {
             echo ${row} | base64 --decode | jq -r ${1}
@@ -37,10 +38,11 @@ jobs:
           
           title=$(_jq '.title')
           url=$(_jq '.url')
-
+          ALL_PR_MESSAGES+="${•<$url|$title>}"
           # Utilize your variables
-          echo "title ======> $title"
-          echo "url ======> $url"
+         # echo "title ======> $title"
+         # echo "url ======> $url"
         done
+        echo "For the Slack - $ALL_PR_MESSAGES"
         
 
