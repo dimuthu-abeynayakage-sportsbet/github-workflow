@@ -1,5 +1,5 @@
 name: "Open PR's"
-run-name: Find open pull requests v4 🏷️
+run-name: Find open pull requests v5 🏷️
 on: push
   # schedule:
   #  - cron: "*/15 * * * *"
@@ -30,7 +30,7 @@ jobs:
       run: |
         #echo "OPEN_PULL_REQUESTS - $OPEN_PULL_REQUESTS"
         echo "Current Repo - ${{ github.event.repository.name }}"
-        for row in $(echo "${jsonData}" | jq -r '.[] | @base64'); do
+        for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
           _jq() {
             echo ${row} | base64 --decode | jq -r ${1}
           }
