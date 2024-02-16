@@ -5,7 +5,7 @@ on: push
   #  - cron: "*/15 * * * *"
 
 jobs:
-  stale:
+  active-pull-request:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -22,11 +22,11 @@ jobs:
       run: | 
         #git config --global user.name ${{ github.triggering_actor }}
         #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
-        openPrs="$(gh pr list)"
-        echo 'NUM_OPEN_ISSUES='$openPrs >> $GITHUB_ENV
+        openPrs="$(gh pr list --json number, title)"
+        echo 'OPEN_PULL_REQUESTS='$openPrs >> $GITHUB_ENV
       env:
         GH_TOKEN: ${{ github.token }}
     - name: Print -----------
-      run: echo "NUM_OPEN_ISSUES - $NUM_OPEN_ISSUES"
+      run: echo "OPEN_PULL_REQUESTS - $OPEN_PULL_REQUESTS"
         
 
