@@ -40,6 +40,6 @@ jobs:
         payload: |
           {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests still open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${FORMATTED_PR_MESSAGES}"}}]}
       env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
         
 
