@@ -30,8 +30,9 @@ jobs:
       run: |
         echo "OPEN_PULL_REQUESTS - $OPEN_PULL_REQUESTS"
         echo "Current Repo - ${{ github.event.repository.name }}"
-        jq -c '.[]' OPEN_PULL_REQUESTS | while read PR; do
-          echo "title ----> $PR['title']"
-        done
+          for i in "${OPEN_PULL_REQUESTS[@]}"
+          do
+           echo "$i"
+          done
         
 
