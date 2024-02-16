@@ -23,8 +23,10 @@ jobs:
         #git config --global user.name ${{ github.triggering_actor }}
         #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
         openPrs="$(gh pr list)"
-        echo 'Prs: $openPrs'
-    env:
+        echo 'NUM_OPEN_ISSUES='$openPrs >> $GITHUB_ENV
+      env:
         GH_TOKEN: ${{ github.token }}
+    - name: Print -----------
+      run: echo "NUM_OPEN_ISSUES - $NUM_OPEN_ISSUES"
         
 
