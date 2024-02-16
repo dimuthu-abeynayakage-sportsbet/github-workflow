@@ -1,5 +1,5 @@
 name: "Open PR's"
-run-name: Find open pull requests v1 🏷️
+run-name: Find open pull requests v2 🏷️
 on: push
   # schedule:
   #  - cron: "*/15 * * * *"
@@ -16,7 +16,5 @@ jobs:
       # Can be "open", "closed", or "all".  Defaults to "open".
         state: open
     # This will echo "Your PR is 7", or be skipped if there is no current PR.
-    - run: echo "Your PR is ${PR}"
-    if: success() && steps.findPr.outputs.number
-    env:
-      PR: ${{ steps.findPr.outputs.pr }}
+    - run: echo "Your PR is ${PR}, ${{ steps.findPr.outputs.pr }}, ${{steps.findPr.outputs.number}}"
+
