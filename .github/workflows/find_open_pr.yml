@@ -34,7 +34,7 @@ jobs:
         GH_TOKEN: ${{ github.token }}
     - name: Send Slack Message
       id: slack
-      uses: slack-github-action@v1
+      uses: Sportsbet-Internal/slack-github-action@v1
       with:
         bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
         channel-id: 'C06K1EC0N5B'
