@@ -29,7 +29,15 @@ jobs:
           url=$(_jq '.url')
           ALL_PR_MESSAGES+="• <$url|$title>\n"
         done
-        echo "For the Slack - $ALL_PR_MESSAGES"
+        echo 'FORMATTED_PR_MESSAGES='$ALL_PR_MESSAGES >> $GITHUB_ENV
     - name: Send Slack Message
+      id: slack
+      uses: slackapi/slack-github-action@v1.25.0
+      with:
+        channel-id: 'C06K1EC0N5B'
+        payload: |
+          {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests still open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${FORMATTED_PR_MESSAGES}"}}]}
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         
 
