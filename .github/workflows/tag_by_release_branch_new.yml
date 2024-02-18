@@ -27,22 +27,21 @@ jobs:
 
         - if: ${{ github.head_ref == 'release' }}
           name: Release Branch
-          id: release_type
-          run: echo "RELEASE_TYPE=minor" >> $GITHUB_OUTPUT
+          id: release_type1
+          run: echo "RELEASE_TYPE=minor" >> $GITHUB_ENV
 
         - if: ${{ startsWith(github.head_ref, 'hotfix/') }}
           name: Release Branch
-          id: release_type
-          run: echo "RELEASE_TYPE=patch" >> $GITHUB_OUTPUT
+          id: release_type2
+          run: echo "RELEASE_TYPE=patch" >> $GITHUB_ENV
 
-        - if: ${{ steps.release_type.outputs.RELEASE_TYPE }}
+        - if: ${{ env.RELEASE_TYPE }}
           name: Initiating Next Version Lookup
           uses: reecetech/version-increment@2023.10.1
-            with:
+          with:
               use_api: true
-              increment: ${{ steps.release_type.outputs.RELEASE_TYPE }}
-          id: tag
-          run: echo "TAG_NAME=${{ steps.release_version.outputs.TAG_NAME }}" >> $GITHUB_ENV
+              increment: ${{ env.RELEASE_TYPE }}
+        - run: echo "TAG_NAME=${{ steps.release_version.outputs.TAG_NAME }}" >> $GITHUB_ENV
 
         - if: ${{ env.TAG_NAME }}
           run: |
