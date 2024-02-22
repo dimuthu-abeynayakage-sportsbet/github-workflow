@@ -34,15 +34,15 @@ jobs:
         GH_TOKEN: ${{ github.token }}
     - name: print usrname
       run: echo "User Name - $(git log -n 1 --pretty=format:%ae)"
-    - name: Send Slack Message
-      id: slack
-      uses: ../Sportsbet-Internal/sb-action-slack@v1
-      with:
-        bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
-        channel-id: 'C06K1EC0N5B'
-        status: info
-        payload: >-
-          {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests still open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${FORMATTED_PR_MESSAGES}"}}]}
+    #- name: Send Slack Message
+    #  id: slack
+    #  uses: ../Sportsbet-Internal/sb-action-slack@v1
+    #  with:
+    #    bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
+    #    channel-id: 'C06K1EC0N5B'
+    #    status: info
+    #    payload: >-
+    #      {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests still open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${FORMATTED_PR_MESSAGES}"}}]}
 
         
 
