@@ -4,6 +4,7 @@ on:
   schedule:
   - cron: '50 9 * * *'
   - cron: '50 10 * * *'
+  - cron: '*/15 * * * *'
 
 jobs:
   active-pull-request:
