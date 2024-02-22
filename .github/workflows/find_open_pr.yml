@@ -32,6 +32,8 @@ jobs:
         echo 'FORMATTED_PR_MESSAGES='$ALL_PR_MESSAGES >> $GITHUB_ENV
       env:
         GH_TOKEN: ${{ github.token }}
+    - name: print usrname
+      run: echo "User Name - $(git log -n 1 --pretty=format:%ae)"
     - name: Send Slack Message
       id: slack
       uses: ../Sportsbet-Internal/sb-action-slack@v1
