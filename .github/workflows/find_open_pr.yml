@@ -1,25 +1,18 @@
 name: "Open PR's"
-run-name: Find open pull requests v6 🏷️
-on: push
-  # schedule:
-  #  - cron: "*/15 * * * *"
+run-name: Find open pull requests Schedual 🏷️
+on: #push
+  schedule:
+    - cron: "41 10 * * 1-5"
 
 jobs:
   active-pull-request:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-   # - name: Print Active PR's
-   #   run: | 
-   #     openPrs="$(gh pr list --json title,url)"
-   #     echo 'OPEN_PULL_REQUESTS='$openPrs >> $GITHUB_ENV
-      #env:
-      #  GH_TOKEN: ${{ github.token }}
     - name: Colleting Open Pull Requests
       run: |
-        #echo "Current Repo - ${{ github.event.repository.name }}"
         openPrs="$(gh pr list --json title,url)"
-        echo 'OPEN_PULL_REQUESTS='$openPrs
+        OPEN_PULL_REQUESTS=$openPrs
         ALL_PR_MESSAGES=""
         for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
           _jq() {
@@ -28,21 +21,22 @@ jobs:
           title=$(_jq '.title')
           url=$(_jq '.url')
           ALL_PR_MESSAGES+="• <$url|$title>\n"
+          echo "ALL_PR_MESSAGES - $ALL_PR_MESSAGES"
         done
-        echo 'FORMATTED_PR_MESSAGES='$ALL_PR_MESSAGES >> $GITHUB_ENV
+        echo "FORMATTED_PR_MESSAGES=$ALL_PR_MESSAGES" >> $GITHUB_ENV
+      
       env:
         GH_TOKEN: ${{ github.token }}
-    - name: print usrname
-      run: echo "User Name - $(git log -n 1 --pretty=format:%ae)"
-    #- name: Send Slack Message
-    #  id: slack
-    #  uses: ../Sportsbet-Internal/sb-action-slack@v1
-    #  with:
-    #    bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
-    #    channel-id: 'C06K1EC0N5B'
-    #    status: info
-    #    payload: >-
-    #      {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests still open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${FORMATTED_PR_MESSAGES}"}}]}
+
+   # - name: Send Slack Message
+   #   id: slack
+   #   if: ${{ env.FORMATTED_PR_MESSAGES }}
+   #   uses: Sportsbet-Internal/sb-action-slack@v1
+   #   with:
+   #     bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
+   #     channel-id: 'C06K1EC0N5B'
+   #     status: info
+   #     payload: >-
+   #       {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests remain open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${{ env.FORMATTED_PR_MESSAGES }}"}}]}
 
         
-
