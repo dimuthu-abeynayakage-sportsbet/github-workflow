@@ -1,5 +1,5 @@
 name: "Open PR's Schedual"
-run-name: Find open pull requests Schedual 🏷️
+run-name: Find open pull requests Schedual v1 🏷️
 on: 
   schedule:
   - cron: '50 9 * * *'
@@ -29,6 +29,10 @@ jobs:
       
       env:
         GH_TOKEN: ${{ github.token }}
+        
+    - name: Printing
+      run: echo "Schedual - ${github.event.schedule}"
+     
 
    # - name: Send Slack Message
    #   id: slack
