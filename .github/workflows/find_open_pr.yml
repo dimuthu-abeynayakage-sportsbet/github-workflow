@@ -1,5 +1,5 @@
 name: "Open PR's Schedual"
-run-name: Find open pull requests Schedual v2 🏷️
+run-name: Find open pull requests Schedual v3 🏷️
 on: 
   schedule:
   - cron: '50 9 * * *'
