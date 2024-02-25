@@ -31,7 +31,7 @@ jobs:
         GH_TOKEN: ${{ github.token }}
         
     - name: Printing
-      run: echo "Schedual - ${github.event.schedule}"
+      run: echo "Schedual - ${{ github.event.schedule }}"
      
 
    # - name: Send Slack Message
