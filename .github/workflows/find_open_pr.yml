@@ -2,9 +2,7 @@ name: "Open PR's Schedual"
 run-name: Find open pull requests Schedual v3 🏷️
 on: 
   schedule:
-  - cron: '50 9 * * *'
-  - cron: '50 10 * * *'
-  #- cron: '*/15 * * * *'
+  - cron: '30 22 * * 1-5'
 
 jobs:
   active-pull-request:
@@ -32,19 +30,19 @@ jobs:
         
     - name: Printing
       run: |
-          echo "Date - $(date +'%Y-%m-%dT%H:%M:%S')"
           echo "Schedual - ${{ github.event.schedule }}"
+          echo "Date - $(date +'%Y-%m-%dT%H:%M:%S')"
      
 
-   # - name: Send Slack Message
-   #   id: slack
-   #   if: ${{ env.FORMATTED_PR_MESSAGES }}
-   #   uses: Sportsbet-Internal/sb-action-slack@v1
-   #   with:
-   #     bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
-   #     channel-id: 'C06K1EC0N5B'
-   #     status: info
-   #     payload: >-
-   #       {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests remain open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${{ env.FORMATTED_PR_MESSAGES }}"}}]}
+    - name: Send Slack Message
+      id: slack
+      if: ${{ env.FORMATTED_PR_MESSAGES }}
+      uses: Sportsbet-Internal/sb-action-slack@v1
+      with:
+        bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
+        channel-id: 'C06K1EC0N5B'
+        status: info
+        payload: >-
+          {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Team :wave:"}},{"type":"section","text":{"type":"mrkdwn","text":"Following pull requests remain open for *${{ github.event.repository.name }}*:"}},{"type":"section","text":{"type":"mrkdwn","text":"${{ env.FORMATTED_PR_MESSAGES }}"}}]}
 
         
