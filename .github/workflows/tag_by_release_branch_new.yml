@@ -1,5 +1,5 @@
 name: Create Release Tag
-run-name: PR Merged ⛙. Create a tag by release version 🏷️
+run-name: PR from ${{github.head_ref}} merged to master. Create a tag by release version 🏷️
 on:
   pull_request:
     types:
