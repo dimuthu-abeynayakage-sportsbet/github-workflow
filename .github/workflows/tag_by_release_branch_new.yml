@@ -7,11 +7,10 @@ on:
     branches:
       - 'main'
 jobs:
-  
   extract-tag-in-branch:
      name: Tag From Latest Version
-     runs-on: ubuntu-latest
      if: github.event.pull_request.merged == true
+     runs-on: ubuntu-latest
      steps:
         - uses: actions/checkout@v4
         - if: ${{ startsWith(github.head_ref, 'release/') }}
