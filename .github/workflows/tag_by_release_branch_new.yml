@@ -1,5 +1,5 @@
 name: Create Release Tag
-run-name: Merge ${{ github.head_ref }} to master ⛙
+run-name: Tag master branch ⛙
 on: [push]
 jobs:
   extract-tag-in-branch:
