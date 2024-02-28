@@ -1,5 +1,5 @@
 name: Create Release Tag
-run-name: Tag master branch ⛙
+run-name: PR Merged ⛙. Create a tag by release version 🏷️
 on: [push]
 jobs:
   extract-tag-in-branch:
