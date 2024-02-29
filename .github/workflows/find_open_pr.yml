@@ -1,8 +1,8 @@
 name: "Open PR's Schedual"
-run-name: Find open pull requests Schedual v3 🏷️
+run-name: Find open pull requests 9am 🏷️
 on: 
   schedule:
-  - cron: '31 23 * * 1-5'
+  - cron: '0 22 * * 1-5'
 
 jobs:
   active-pull-request:
