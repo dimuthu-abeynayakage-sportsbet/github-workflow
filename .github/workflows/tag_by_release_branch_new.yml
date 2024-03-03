@@ -67,8 +67,6 @@ jobs:
             #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
             git config user.name github-actions
             git config user.email github-actions@github.com
-            #git tag $RELEASING_TAG -m "Release $RELEASING_TAG"
-            #git push --tags
             git tag -a $RELEASING_TAG -m "Release $RELEASING_TAG"
             git push origin $RELEASING_TAG
 
