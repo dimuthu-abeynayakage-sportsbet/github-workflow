@@ -11,8 +11,6 @@ jobs:
      name: Tag From Latest Version
      if: github.event.pull_request.merged == true
      runs-on: ubuntu-latest
-     env: 
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      steps:
         - uses: actions/checkout@v4
         - if: ${{ startsWith(github.head_ref, 'release/') }}
@@ -67,6 +65,8 @@ jobs:
             echo "Next Tag - $RELEASING_TAG"
             #git config --global user.name ${{ github.triggering_actor }}
             #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
+            git config user.name github-actions
+            git config user.email github-actions@github.com
             git tag $RELEASING_TAG -m "Release $RELEASING_TAG"
             git push --tags
 
