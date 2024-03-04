@@ -63,10 +63,7 @@ jobs:
           run: |
             RELEASING_TAG=$([ $RELEASE_TAG_IN_BRANCH ] && echo "$RELEASE_TAG_IN_BRANCH" || echo "$NEXT_TAG")
             echo "Next Tag - $RELEASING_TAG"
-            #git config --global user.name ${{ github.triggering_actor }}
-            #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
             git config --global user.name "GitHub Actions"
-            #git config user.email github-actions@github.com
             git tag -a $RELEASING_TAG -m "Release $RELEASING_TAG"
             git push origin $RELEASING_TAG
 
