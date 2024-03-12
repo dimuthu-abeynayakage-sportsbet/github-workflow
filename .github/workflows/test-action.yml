@@ -1,0 +1,8 @@
+name: "Action Invocation"
+run-name: Tag by action
+on: push
+jobs:
+  active-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+       - uses: action-create-release-tag@main
