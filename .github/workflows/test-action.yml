@@ -16,4 +16,4 @@ jobs:
           echo "This text is written by workflow" > my_branch.txt
           git add my_branch.txt
           git commit -m "Added File from workflow - my_branch"
-          git push
+          git push --set-upstream origin testing/my_branch
