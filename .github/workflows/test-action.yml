@@ -12,7 +12,8 @@ jobs:
       - name: Adding new file
         run: | 
           git config --global user.name "GitHub Actions"
-          touch test.txt
-          git add test.txt
-          git commit -m "Added File from workflow"
+          git checkout -b testing/my_branch develop
+          echo "This text is written by workflow" > my_branch.txt
+          git add my_branch.txt
+          git commit -m "Added File from workflow - my_branch"
           git push
