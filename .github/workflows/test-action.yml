@@ -21,3 +21,5 @@ jobs:
       - name: Create PR
         run: | 
           gh pr create -B develop -H testing/my_branch -t "Version upgrade to VERSION" --body "Upgrade pom.xml to VERSION"
+        env:
+         GH_TOKEN: ${{ github.token }}
