@@ -5,5 +5,13 @@ jobs:
   active-pull-request:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: action-create-release-tag@main
+      - uses: actions/checkout@v4
+        with:
+         ref: develop
+
+      - name: Adding new file
+        run: | 
+          touch test.txt
+          git add test.txt
+          git commit -m "Added File from workflow"
+          git push
