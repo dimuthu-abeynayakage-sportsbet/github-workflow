@@ -11,6 +11,7 @@ jobs:
 
       - name: Adding new file
         run: | 
+          git config --global user.name "GitHub Actions"
           touch test.txt
           git add test.txt
           git commit -m "Added File from workflow"
