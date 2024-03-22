@@ -20,9 +20,9 @@ jobs:
           
       - name: Create PR
         run: | 
-          gh pr create --base develop --head testing/my_branch 
-          --title "Version upgrade to VERSION v1" 
-          --body "Upgrade pom.xml to VERSION"
-          --reviewer dimuthu-abeynayakage-sportsbet
+          gh pr create --base develop --head testing/my_branch \
+           --title "Version upgrade to VERSION v1" \
+          --body "Upgrade pom.xml to VERSION" \
+          --reviewer dimuthu-abeynayakage-sportsbet \
         env:
          GH_TOKEN: ${{ github.token }}
