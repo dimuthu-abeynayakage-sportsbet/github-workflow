@@ -15,7 +15,7 @@ jobs:
           git checkout -b testing/my_branch develop
           echo "This text is written by workflow" > my_branch.txt
           git add my_branch.txt
-          git commit -m "Added File from workflow to my_branch"
+          git commit -m "Added File from workflow to my_branch v1"
           git push --set-upstream origin testing/my_branch
           
       - name: Create PR
