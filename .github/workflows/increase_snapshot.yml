@@ -38,8 +38,8 @@ jobs:
       - name: Create Branch And Upgrade pom.xml With Latest Version
         id: branch
         run: |
-          echo "Printing the current Version - ${{ steps.current_version.outputs.VERSION }}"
-          echo "Printing the next Version - ${{ steps.next_version.outputs.VERSION }}"
+          echo "Current Version - ${{ steps.current_version.outputs.VERSION }}"
+          echo "Next Version - ${{ steps.next_version.outputs.VERSION }}"
           
           SNAPSHOT="${{ steps.next_version.outputs.VERSION_SNAPSHOT }}"
           version_upgrade_branch="feature/increment-release-version_$SNAPSHOT"
@@ -50,8 +50,13 @@ jobs:
           git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
           git checkout -b $version_upgrade_branch develop
           mvn --file pom.xml -q versions:set -DnewVersion="$SNAPSHOT"
+          echo "File Added"
+          git status
+          echo "After Status"
           git add pom.xml
           git commit -m "Upgrade pom Version to $SNAPSHOT"
+           echo "Commit file"
+           git status
           git push --set-upstream origin $version_upgrade_branch
 
       - name: Create Pull Request
