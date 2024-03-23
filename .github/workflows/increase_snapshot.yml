@@ -45,9 +45,9 @@ jobs:
           version_upgrade_branch="feature/increment-release-version_$SNAPSHOT"
           echo "NAME=$version_upgrade_branch" >> $GITHUB_OUTPUT
           
-          git config --global user.name "GitHub Actions"
-          #git config --global user.name ${{ github.triggering_actor }}
-          #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
+          #git config --global user.name "GitHub Actions"
+          git config --global user.name ${{ github.triggering_actor }}
+          git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
           git checkout -b $version_upgrade_branch develop
           mvn --file pom.xml -q versions:set -DnewVersion="$SNAPSHOT"
           git add pom.xml
