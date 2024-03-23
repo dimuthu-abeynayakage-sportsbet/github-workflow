@@ -1,6 +1,11 @@
-name: "Merge To Mater Post Action"
-run-name: Merge To Mater Post Action
-on: push
+name: "New Version Release Post Action"
+run-name: New Version Release Post Action
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'master'
 jobs:
   merge_to_master_post_action:
     runs-on: ubuntu-latest
@@ -18,7 +23,7 @@ jobs:
           echo "VERSION=$RELEASE_VERSION" >> $GITHUB_OUTPUT
 
       - name: Create Release Tag
-        if: false
+       # if: false
         run: |
           RELEASE_VERSION=${{ steps.current_version.outputs.VERSION }}
           git config --global user.name "GitHub Actions"
