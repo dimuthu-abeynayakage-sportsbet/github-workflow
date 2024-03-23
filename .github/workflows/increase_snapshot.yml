@@ -10,10 +10,7 @@ jobs:
   merge_to_master_post_action:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: develop
-
+    
       - name: Find Release Version
         id: current_version
         run: |
@@ -21,6 +18,10 @@ jobs:
           RELEASE_VERSION=${RELEASE_VERSION/'-SNAPSHOT'}
           echo "Release Version - ($RELEASE_VERSION)"
           echo "VERSION=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+          
+      - uses: actions/checkout@v4
+        with:
+          ref: master
 
       - name: Create Release Tag
        # if: false
@@ -31,6 +32,10 @@ jobs:
           git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
           git tag -a $RELEASE_VERSION -m "Release $RELEASE_VERSION"
           git push origin $RELEASE_VERSION
+          
+      - uses: actions/checkout@v4
+        with:
+          ref: develop
 
       - name: Find Next Version
         id: next_version
