@@ -66,13 +66,3 @@ jobs:
            echo "PR_URL=$PR_URL" >> $GITHUB_OUTPUT
           env:
           GH_TOKEN: ${{ github.token }}
-
-      - name: Send Slack Message
-        if: false
-        uses: Sportsbet-Internal/sb-action-slack@v1
-        with:
-          bot-token: ${{ inputs.bot-token }}
-          channel-id: C06K1EC0N5B
-          status: info
-          payload: >-
-            {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":merge: New version of *${{ github.event.repository.name }}* is released. Pull request raised to increase develop version to *${{ steps.next_version.outputs.VERSION_SNAPSHOT }}* \n ${{ steps.pull_request.outputs.PR_URL }}"}}]}
