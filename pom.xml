@@ -7,5 +7,5 @@
 
     <groupId>groupId</groupId>
     <artifactId>jersey-jetty</artifactId>
-    <version>0.90.107</version>
+    <version>0.90.108-SNAPSHOT</version>
 </project>
