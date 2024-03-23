@@ -6,13 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-         ref: develop
+        #with:
+        #  ref: develop
 
       - name: Find Release Version
         id: current_version
         run: |
-          #git config --global user.name "GitHub Actions"
           RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           RELEASE_VERSION=${RELEASE_VERSION/'-SNAPSHOT'}
           echo "Release Version - ($RELEASE_VERSION)"
@@ -22,8 +21,7 @@ jobs:
         if: false
         run: |
           RELEASE_VERSION=${{ steps.current_version.outputs.VERSION }}
-          #RELEASE_VERSION=0.99.11
-          #git config --global user.name "GitHub Actions"
+          git config --global user.name "GitHub Actions"
           git tag -a $RELEASE_VERSION -m "Release $RELEASE_VERSION"
           git push origin $RELEASE_VERSION
 
@@ -35,18 +33,46 @@ jobs:
           bv=$((parts[2] + 1))
           NEW_VERSION="${parts[0]}.${parts[1]}.${bv}"
           echo "VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION_SNAPSHOT=$NEW_VERSION-SNAPSHOT" >> $GITHUB_OUTPUT
 
       - name: Create Branch And Upgrade pom.xml With Latest Version
+        id: branch
         run: |
           echo "Printing the current Version - ${{ steps.current_version.outputs.VERSION }}"
           echo "Printing the next Version - ${{ steps.next_version.outputs.VERSION }}"
-          NEW_VERSION=${{ steps.next_version.outputs.VERSION }}
-          version_upgrade_branch="feature/increment-release-version_$NEW_VERSION-SNAPSHOT"
-          #git config --global user.name "GitHub Actions"
-          git config --global user.name ${{ github.triggering_actor }}
-          git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
+          
+          SNAPSHOT="${{ steps.next_version.outputs.VERSION_SNAPSHOT }}"
+          version_upgrade_branch="feature/increment-release-version_$SNAPSHOT"
+          echo "NAME=$version_upgrade_branch" >> $GITHUB_OUTPUT
+          
+          git config --global user.name "GitHub Actions"
+          #git config --global user.name ${{ github.triggering_actor }}
+          #git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
           git checkout -b $version_upgrade_branch develop
-          mvn --file pom.xml -q versions:set -DnewVersion="$NEW_VERSION-SNAPSHOT"
+          mvn --file pom.xml -q versions:set -DnewVersion="$SNAPSHOT"
           git add pom.xml
-          git commit -m "Upgrade pom Version to $NEW_VERSION"
+          git commit -m "Upgrade pom Version to $SNAPSHOT"
           git push --set-upstream origin $version_upgrade_branch
+
+      - name: Create Pull Request
+        id: pull_request
+        run: |
+          SNAPSHOT=${{ steps.next_version.outputs.VERSION_SNAPSHOT }}
+          BRANCH=${{ steps.branch.outputs.NAME }}
+          PR_URL=$(gh pr create --base develop --head $BRANCH \
+           --title "Upgrade to version to $SNAPSHOT" \
+          --body "Upgrade pom.xml to $SNAPSHOT" \
+          --reviewer dimuthu-abeynayakage-sportsbet)
+           echo "PR_URL=$PR_URL" >> $GITHUB_OUTPUT
+          env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Send Slack Message
+        if: false
+        uses: Sportsbet-Internal/sb-action-slack@v1
+        with:
+          bot-token: ${{ inputs.bot-token }}
+          channel-id: C06K1EC0N5B
+          status: info
+          payload: >-
+            {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":merge: New version of *${{ github.event.repository.name }}* is released. Pull request raised to increase develop version to *${{ steps.next_version.outputs.VERSION_SNAPSHOT }}* \n ${{ steps.pull_request.outputs.PR_URL }}"}}]}
