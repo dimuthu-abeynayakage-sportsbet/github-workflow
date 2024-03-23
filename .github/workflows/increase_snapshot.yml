@@ -50,13 +50,8 @@ jobs:
           git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
           git checkout -b $version_upgrade_branch develop
           mvn --file pom.xml -q versions:set -DnewVersion="$SNAPSHOT"
-          echo "File Added"
-          git status
-          echo "After Status"
           git add pom.xml
           git commit -m "Upgrade pom Version to $SNAPSHOT"
-           echo "Commit file"
-           git status
           git push --set-upstream origin $version_upgrade_branch
 
       - name: Create Pull Request
@@ -65,7 +60,7 @@ jobs:
           SNAPSHOT=${{ steps.next_version.outputs.VERSION_SNAPSHOT }}
           BRANCH=${{ steps.branch.outputs.NAME }}
           PR_URL=$(gh pr create --base develop --head $BRANCH \
-           --title "Upgrade to version to $SNAPSHOT" \
+           --title "Upgrade version to $SNAPSHOT" \
           --body "Upgrade pom.xml to $SNAPSHOT" \
           --reviewer dimuthu-abeynayakage-sportsbet)
            echo "PR_URL=$PR_URL" >> $GITHUB_OUTPUT
