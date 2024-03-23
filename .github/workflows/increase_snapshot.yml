@@ -26,7 +26,9 @@ jobs:
        # if: false
         run: |
           RELEASE_VERSION=${{ steps.current_version.outputs.VERSION }}
-          git config --global user.name "GitHub Actions"
+          #git config --global user.name "GitHub Actions"
+          git config --global user.name ${{ github.triggering_actor }}
+          git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
           git tag -a $RELEASE_VERSION -m "Release $RELEASE_VERSION"
           git push origin $RELEASE_VERSION
 
