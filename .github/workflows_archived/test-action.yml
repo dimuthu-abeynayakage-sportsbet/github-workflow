@@ -1,0 +1,28 @@
+name: "Action Invocation"
+run-name: Tag by action
+on: push
+jobs:
+  active-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+         ref: develop
+
+      - name: Adding new file
+        run: | 
+          git config --global user.name "GitHub Actions"
+          git checkout -b testing/my_branch develop
+          echo "This text is written by workflow" > my_branch.txt
+          git add my_branch.txt
+          git commit -m "Added File from workflow to my_branch"
+          git push --set-upstream origin testing/my_branch
+          
+      - name: Create PR
+        run: | 
+          gh pr create --base develop --head testing/my_branch \
+           --title "Version upgrade to VERSION v1" \
+          --body "Upgrade pom.xml to VERSION" \
+          --reviewer dimuthu-abeynayakage-sportsbet \
+        env:
+         GH_TOKEN: ${{ github.token }}
