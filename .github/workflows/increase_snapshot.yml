@@ -64,5 +64,6 @@ jobs:
           --body "Upgrade pom.xml to $SNAPSHOT" \
           --reviewer dimuthu-abeynayakage-sportsbet)
            echo "PR_URL=$PR_URL" >> $GITHUB_OUTPUT
-          env:
+           
+        env:
           GH_TOKEN: ${{ github.token }}
