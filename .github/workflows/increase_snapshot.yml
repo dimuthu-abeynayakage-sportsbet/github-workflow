@@ -1,0 +1,50 @@
+name: "Merge To Mater Post Action"
+run-name: Merge To Mater Post Action
+on: push
+jobs:
+  merge_to_master_post_action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find Release Version
+        id: current_version
+        run: |
+          #git config --global user.name "GitHub Actions"
+          RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          RELEASE_VERSION=${RELEASE_VERSION/'-SNAPSHOT'}
+          echo "Release Version - ($RELEASE_VERSION)"
+          echo "VERSION=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Release Tag
+        if: false
+        run: |
+          RELEASE_VERSION=${{ steps.current_version.outputs.VERSION }}
+          #RELEASE_VERSION=0.99.11
+          #git config --global user.name "GitHub Actions"
+          git tag -a $RELEASE_VERSION -m "Release $RELEASE_VERSION"
+          git push origin $RELEASE_VERSION
+
+      - name: Find Next Version
+        id: next_version
+        run: |
+          RELEASE_VERSION=${{ steps.current_version.outputs.VERSION }}
+          parts=( ${RELEASE_VERSION//./ } )
+          bv=$((parts[2] + 1))
+          NEW_VERSION="${parts[0]}.${parts[1]}.${bv}"
+          echo "VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Branch And Upgrade pom.xml With Latest Version
+        run: |
+          echo "Printing the current Version - ${{ steps.current_version.outputs.VERSION }}"
+          echo "Printing the next Version - ${{ steps.next_version.outputs.VERSION }}"
+          NEW_VERSION=${{ steps.next_version.outputs.VERSION }}
+          version_upgrade_branch="feature/increment-release-version_$NEW_VERSION-SNAPSHOT"
+          #git config --global user.name "GitHub Actions"
+          git config --global user.name ${{ github.triggering_actor }}
+          git config --global user.email dimuthu.abeynayakage@sportsbet.com.au
+          git checkout -b $version_upgrade_branch develop
+          mvn --file pom.xml -q versions:set -DnewVersion="$NEW_VERSION-SNAPSHOT"
+          git add pom.xml
+          git commit -m "Upgrade pom Version to $NEW_VERSION"
+          git push --set-upstream origin $version_upgrade_branch
