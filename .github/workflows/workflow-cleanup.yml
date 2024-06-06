@@ -1,7 +1,7 @@
 name: Delete old workflow runs
-on:
-  schedule:
-    - cron: '45 02 * * *'
+on: [push]
+  #schedule:
+  #  - cron: '45 02 * * *'
 # Run monthly, at 00:00 on the 1st day of month.
 
 jobs:
@@ -9,9 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete workflow runs
-        uses: Mattraks/delete-workflow-runs@v2
-        with:
-          token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          retain_days: 30
-          keep_minimum_runs: 6
+        #uses: Mattraks/delete-workflow-runs@v2
+        #with:
+        #  token: ${{ github.token }}
+        #  repository: ${{ github.repository }}
+        #  retain_days: 30
+        #  keep_minimum_runs: 6
+        run: | 
+          all_work_flows="$(gh run list --jq ' .[]| select(.createdAt > (now-( 30 * 86400) | strftime("%Y-%m-%dT%H-%M-%SZ") ))' --json name,number,databaseId,createdAt --repo github.com/Sportsbet-Internal/sp-generosity-merchandising --limit 1)"
+           for row in $(echo "${all_work_flows}" | jq -r '.[] | @base64'); do
+            _jq() {
+              echo ${row} | base64 --decode | jq -r ${1}
+            }
+            name=$(_jq '.name')
+            echo "name: ${name}"
+           done
+
