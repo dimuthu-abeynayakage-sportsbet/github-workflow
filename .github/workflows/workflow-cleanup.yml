@@ -18,6 +18,7 @@ jobs:
             name=$(_jq '.name')
             echo "name: ${name}"
            done
+           
         env:
-         GH_TOKEN: ${{ inputs.gh_token }}
+         GH_TOKEN: ${{ github.token }}
 
