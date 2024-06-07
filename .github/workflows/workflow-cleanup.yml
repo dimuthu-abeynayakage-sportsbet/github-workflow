@@ -11,7 +11,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Retaining Day Onwords
         run: |
-          retenctionDate="2024-06-07"
+          retenctionDays=8
+          retenctionDate=$(date '+%Y-%m-%d' -d "${retenctionDays} day ago")
           echo "retenctionDate=$retenctionDate" >> $GITHUB_ENV
         env:
          GH_TOKEN: ${{ github.token }}
