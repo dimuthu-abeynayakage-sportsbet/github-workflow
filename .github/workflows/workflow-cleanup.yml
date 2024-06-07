@@ -35,7 +35,7 @@ jobs:
                 createdAt=$(_jq '.createdAt')
                 echo "Name: $name, number: $number, databaseId: $databaseId, createdAt: $createdAt"
              done
-             echo "Queried Date: ($OPEN_PULL_REQUESTS)"
+             echo "Queried Date: ${{ OPEN_PULL_REQUESTS }}"
              if [ $OPEN_PULL_REQUESTS == ""]; then 
                hasMore=false
              fi
