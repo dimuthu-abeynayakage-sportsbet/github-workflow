@@ -19,7 +19,7 @@ jobs:
       - name: Delete workflow runs
         run: | 
           echo "Date retenctionDate: ${{ env.retenctionDate }}"
-          all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt > env.retenctionDate)]'
+          all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt > env.retenctionDate)]' )
            OPEN_PULL_REQUESTS="$all_work_flows"
            echo "Data: ${OPEN_PULL_REQUESTS}"
            
