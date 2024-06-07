@@ -22,7 +22,7 @@ jobs:
         run: | 
           echo "Date retenctionDateNew: ${{ env.retenctionDateNew }}"
           all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' .[]| select(.createdAt > env.retenctionDateNew)' )
-           OPEN_PULL_REQUESTS=$all_work_flows
+           OPEN_PULL_REQUESTS="[$all_work_flows]"
            echo "Data: ${OPEN_PULL_REQUESTS}"
            
            for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
