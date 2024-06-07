@@ -13,15 +13,13 @@ jobs:
         run: |
           retenctionDate="2024-06-07"
           echo "retenctionDateNew=$retenctionDate" >> $GITHUB_ENV
-          openPrs="$(gh pr list --json title,url,reviews)"
-          echo "PR Data: ${openPrs}"
         env:
          GH_TOKEN: ${{ github.token }}
          
       - name: Delete workflow runs
         run: | 
           echo "Date retenctionDateNew: ${{ env.retenctionDateNew }}"
-          all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' .[]| select(.createdAt > env.retenctionDateNew)' )
+          all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt > env.retenctionDateNew)]' )
            OPEN_PULL_REQUESTS="[$all_work_flows]"
            echo "Data: ${OPEN_PULL_REQUESTS}"
            
