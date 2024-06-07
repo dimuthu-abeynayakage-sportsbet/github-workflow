@@ -23,10 +23,11 @@ jobs:
           
           while :
           do
-            OLD_WORKFLOWS=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt < env.retenctionDate)]' )
+            OLD_WORKFLOWS=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 50 | jq ' [.[]| select(.createdAt < env.retenctionDate)]' )
             echo "Queried Data 1 - ${OLD_WORKFLOWS}"
              
              if [ $OLD_WORKFLOWS == [] ]; then 
+               echo "No Workflows left"
                break
              fi
              
