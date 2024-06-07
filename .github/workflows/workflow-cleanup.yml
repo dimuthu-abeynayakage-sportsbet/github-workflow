@@ -24,7 +24,7 @@ jobs:
           while [ $hasMore == true ]
           do
             obsolete_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt < env.retenctionDate)]' )
-             OPEN_PULL_REQUESTS="$all_work_flows"
+             OPEN_PULL_REQUESTS="$obsolete_work_flows"
              for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
                 _jq() {
                   echo ${row} | base64 --decode | jq -r ${1}
@@ -36,7 +36,7 @@ jobs:
                 echo "Name: $name, number: $number, databaseId: $databaseId, createdAt: $createdAt"
              done
              echo "Queried Date: ($OPEN_PULL_REQUESTS)"
-             if [ $obsolete_work_flows == ""]; then 
+             if [ $OPEN_PULL_REQUESTS == ""]; then 
                hasMore=false
              fi
            done
