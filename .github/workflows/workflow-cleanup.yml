@@ -20,10 +20,12 @@ jobs:
       - name: Delete workflow runs
         run: | 
           echo "Date retenctionDate: ${{ env.retenctionDate }}"
+          hasMore=true
+          while [hasMore]
           do
-            all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt < env.retenctionDate)]' )
-             OPEN_PULL_REQUESTS="$all_work_flows"
-             for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
+            obsolete_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt < env.retenctionDate)]' )
+             #OPEN_PULL_REQUESTS="$all_work_flows"
+             for row in $(echo "${obsolete_work_flows}" | jq -r '.[] | @base64'); do
                 _jq() {
                   echo ${row} | base64 --decode | jq -r ${1}
                 }
@@ -33,7 +35,11 @@ jobs:
                 createdAt=$(_jq '.createdAt')
                 echo "Name: $name, number: $number, databaseId: $databaseId, createdAt: $createdAt"
              done
-           done while [ "$all_work_flows" != " " ]
+             echo "Queried Date: ($obsolete_work_flows)"
+             if [ $obsolete_work_flows == ""]; then 
+               hasMore=false
+             done
+           done
            
         env:
          GH_TOKEN: ${{ github.token }}
