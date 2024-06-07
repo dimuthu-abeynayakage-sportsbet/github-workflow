@@ -26,22 +26,10 @@ jobs:
             obsolete_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt < env.retenctionDate)]' )
              OPEN_PULL_REQUESTS="$obsolete_work_flows"
              echo "Queried Data 1 - ${OPEN_PULL_REQUESTS}"
-   
-              if [ $OPEN_PULL_REQUESTS == "[]"]; then 
-                echo "Trueeeeeeee 222"
-              fi
-              if [ $OPEN_PULL_REQUESTS == "[]"]; then 
-               echo "Trueeeeeeee 333"
+             if [ $OPEN_PULL_REQUESTS == [] ]; then 
+                echo "Emptyyyyyy"
              fi
-
-             if [ -z "$OPEN_PULL_REQUESTS" ]; then
-             echo "Trueeeeeeee 333"
-             fi
-             
-             if [ $OPEN_PULL_REQUESTS == "[]"]; then 
-               hasMore=false
-               break
-             fi
+          
              break
              for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
                 _jq() {
