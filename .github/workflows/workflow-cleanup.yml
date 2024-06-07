@@ -8,6 +8,7 @@ jobs:
   del_runs:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Retaining Day Onwords
         run: |
           retenctionDate="2024-06-07"
