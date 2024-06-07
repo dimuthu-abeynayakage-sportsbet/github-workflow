@@ -12,7 +12,7 @@ jobs:
         run: | 
           retenction_date="2024-06-07"
           #query="gh run list --jq ' .[]| select(.createdAt < ${retenction_date})'  --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10"
-           all_work_flows="$(gh run list --jq ' .[]| select(.createdAt < $retenction_date)'  --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10)"
+           all_work_flows=$(gh run list --jq ' .[]| select(.createdAt < ${retenction_date})'  --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10)
            
            for row in $(echo "${all_work_flows}" | jq -r '.[] | @base64'); do
             _jq() {
