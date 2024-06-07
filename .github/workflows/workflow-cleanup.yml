@@ -21,14 +21,16 @@ jobs:
           echo "Date retenctionDate: ${{ env.retenctionDate }}"
           all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' [.[]| select(.createdAt > env.retenctionDate)]' )
            OPEN_PULL_REQUESTS="$all_work_flows"
-           echo "Data: ${OPEN_PULL_REQUESTS}"
            
            for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
               _jq() {
                 echo ${row} | base64 --decode | jq -r ${1}
               }
               name=$(_jq '.name')
-              echo "Name: $name"
+              number=$(_jq '.number')
+              databaseId=$(_jq '.databaseId')
+              createdAt=$(_jq '.createdAt')
+              echo "Name: $name, number: $number, databaseId: $databaseId, createdAt: $createdAt"
            done
            
         env:
