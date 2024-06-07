@@ -27,9 +27,6 @@ jobs:
              OPEN_PULL_REQUESTS="$obsolete_work_flows"
              echo "Queried Data 1 - ${OPEN_PULL_REQUESTS}"
    
-            if [ ${#OPEN_PULL_REQUESTS[@]} -eq 0]; then 
-              echo "Trueeeeeeee 1111"
-             fi
               if [ $OPEN_PULL_REQUESTS == "[]"]; then 
                 echo "Trueeeeeeee 222"
               fi
