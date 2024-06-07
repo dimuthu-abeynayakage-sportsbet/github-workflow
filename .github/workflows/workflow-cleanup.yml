@@ -12,22 +12,18 @@ jobs:
         run: |
           retenctionDate="2024-06-07"
           echo "retenctionDateNew=$retenctionDate" >> $GITHUB_ENV
-          echo "dkaDate=2024-06-07" >> $GITHUB_ENV
       - name: Delete workflow runs
         run: | 
           echo "Date retenctionDateNew: ${{ env.retenctionDateNew }}"
-          echo "Date dkaDate: ${{ env.dkaDate }}"
-         
-          
-          #query="gh run list --jq ' .[]| select(.createdAt < ${retenction_date})'  --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10"
-           all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' .[]| select(.createdAt > env.retenctionDateNew)' )
-           
-           for row in $(echo "${all_work_flows}" | jq -r '.[] | @base64'); do
-            _jq() {
-              echo ${row} | base64 --decode | jq -r ${1}
-            }
-            name=$(_jq '.name')
-            echo "name: ${name}"
+          all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' .[]| select(.createdAt > env.retenctionDateNew)' )
+           echo "Data: ${all_work_flows}"
+           OPEN_PULL_REQUESTS=$all_work_flows
+           for row in $(echo "${OPEN_PULL_REQUESTS}" | jq -r '.[] | @base64'); do
+              _jq() {
+                echo ${row} | base64 --decode | jq -r ${1}
+              }
+              name=$(_jq '.name
+              echo "Name: ${name}"
            done
            
         env:
