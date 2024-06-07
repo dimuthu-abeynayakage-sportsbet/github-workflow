@@ -40,7 +40,7 @@ jobs:
                 databaseId=$(_jq '.databaseId')
                 createdAt=$(_jq '.createdAt')
                 
-                echo "Deleteing - Name: $name, number: $number, databaseId: $databaseId, createdAt: $createdAt]"
+                echo "Deleteing - Name: $name, Number: $number, DatabaseId: $databaseId, CreatedAt: $createdAt"
                 $(gh run delete $databaseId)
              done
              
