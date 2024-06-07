@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Delete workflow runs
         run: | 
-           all_work_flows="$(gh run list --jq ' .[]| select(.createdAt > (now-( 30 * 86400) | strftime("%Y-%m-%dT%H-%M-%SZ") ))' --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 1)"
+           all_work_flows="$(gh run list --jq ' .[]| select(.createdAt < "2024-06-05")'  --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 1)"
            for row in $(echo "${all_work_flows}" | jq -r '.[] | @base64'); do
             _jq() {
               echo ${row} | base64 --decode | jq -r ${1}
