@@ -38,7 +38,7 @@ jobs:
              echo "Queried Date: ($obsolete_work_flows)"
              if [ $obsolete_work_flows == ""]; then 
                hasMore=false
-             done
+             fi
            done
            
         env:
