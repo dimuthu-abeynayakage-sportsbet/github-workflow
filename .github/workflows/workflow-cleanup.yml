@@ -8,7 +8,7 @@ jobs:
   del_runs:
     runs-on: ubuntu-latest
     steps:
-      - name: dsssdds
+      - name: Retaining Day Onwords
         run: |
           retenctionDate="2024-06-07"
           echo "retenctionDateNew=$retenctionDate" >> $GITHUB_ENV
@@ -20,7 +20,7 @@ jobs:
          
           
           #query="gh run list --jq ' .[]| select(.createdAt < ${retenction_date})'  --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10"
-           all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10 | jq ' .[]| select(.createdAt < env.retenctionDateNew)' )
+           all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 5 | jq ' .[]| select(.createdAt > env.retenctionDateNew)' )
            
            for row in $(echo "${all_work_flows}" | jq -r '.[] | @base64'); do
             _jq() {
