@@ -33,6 +33,13 @@ jobs:
               if [ $OPEN_PULL_REQUESTS == "[]"]; then 
                 echo "Trueeeeeeee 222"
               fi
+              if [ $OPEN_PULL_REQUESTS == "[]"]; then 
+               echo "Trueeeeeeee 333"
+             fi
+
+             if [ -z "$OPEN_PULL_REQUESTS" ]; then
+             echo "Trueeeeeeee 333"
+             fi
              
              if [ $OPEN_PULL_REQUESTS == "[]"]; then 
                hasMore=false
