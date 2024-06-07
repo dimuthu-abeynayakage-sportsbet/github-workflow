@@ -40,8 +40,8 @@ jobs:
                 databaseId=$(_jq '.databaseId')
                 createdAt=$(_jq '.createdAt')
                 
-                echo "Deleteing - Name: $name, Number: $number, DatabaseId: $databaseId, CreatedAt: $createdAt"
-                $(gh run delete --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow $databaseId)
+                echo "Deleteing - Name: $name, Number: $number, DatabaseId: $databaseId, Created: $createdAt"
+                gh run delete --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow $databaseId
              done
              
            done
