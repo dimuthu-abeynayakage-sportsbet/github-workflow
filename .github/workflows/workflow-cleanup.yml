@@ -14,7 +14,7 @@ jobs:
           echo "retenctionDateNew=$retenctionDate" >> $GITHUB_ENV
           echo "Date: ${{ env.retenctionDateNew }}"
           #query="gh run list --jq ' .[]| select(.createdAt < ${retenction_date})'  --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10"
-           all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10 | jq ' .[]| select(.createdAt < env.retenctionDateNew)' )
+           all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10 | jq ' .[]| select(.createdAt < retenctionDate)' )
            
            for row in $(echo "${all_work_flows}" | jq -r '.[] | @base64'); do
             _jq() {
