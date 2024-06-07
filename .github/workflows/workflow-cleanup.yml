@@ -8,12 +8,16 @@ jobs:
   del_runs:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete workflow runs
-        run: | 
+      - name: dsssdds
+        run: |
           retenctionDate="2024-06-07"
           echo "retenctionDateNew=$retenctionDate" >> $GITHUB_ENV
           echo "dkaDate=2024-06-07" >> $GITHUB_ENV
-          echo "Date: ${{ env.dkaDate }}"
+      - name: Delete workflow runs
+        run: | 
+          echo "Date retenctionDateNew: ${{ env.retenctionDateNew }}"
+          echo "Date dkaDate: ${{ env.dkaDate }}"
+         
           
           #query="gh run list --jq ' .[]| select(.createdAt < ${retenction_date})'  --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10"
            all_work_flows=$(gh run list --json name,number,databaseId,createdAt --repo github.com/dimuthu-abeynayakage-sportsbet/github-workflow --limit 10 | jq ' .[]| select(.createdAt < retenctionDate)' )
