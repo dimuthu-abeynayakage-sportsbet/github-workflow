@@ -82,9 +82,9 @@ jobs:
           stackPrefix=''
           stackPrefixCdkContext=''
           if [[ -z '${{ inputs.STACK_PREFIX }}' ]]; then
-            stackPrefix=$inputs.STACK_PREFIX
+             echo "stackPrefix=${{ inputs.STACK_PREFIX }}" >> $GITHUB_ENV
              echo "STACK_PREFIX Empty "
-             echo "stackPrefix: ${{stackPrefix}} "
+             echo "stackPrefix: ${{ env.stackPrefix }} "
           else 
           echo "STACK_PREFIX not Empty "
           fi
