@@ -81,3 +81,8 @@ jobs:
           stackEnvPrefixName="${{ inputs.ACCOUNT }}"
           stackPrefix=''
           stackPrefixCdkContext=''
+          if [[ -z '${{ inputs.STACK_PREFIX }}' ]]; then
+            echo "STACK_PREFIX Empty "
+          else 
+          echo "STACK_PREFIX not Empty "
+          fi
