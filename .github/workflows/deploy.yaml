@@ -82,7 +82,9 @@ jobs:
           stackPrefix=''
           stackPrefixCdkContext=''
           if [[ -z '${{ inputs.STACK_PREFIX }}' ]]; then
-            echo "STACK_PREFIX Empty "
+            stackPrefix=$inputs.STACK_PREFIX
+             echo "STACK_PREFIX Empty "
+             echo "stackPrefix: ${{stackPrefix}} "
           else 
           echo "STACK_PREFIX not Empty "
           fi
