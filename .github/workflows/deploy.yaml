@@ -79,8 +79,6 @@ jobs:
         id: deploy-parameter
         run: |
           stackEnvPrefixName="${{ inputs.ACCOUNT }}"
-          stackPrefix=''
-          stackPrefixCdkContext=''
           if [[ ! -z '${{ inputs.STACK_PREFIX }}' ]]; then
              echo "stackPrefix=${{ inputs.STACK_PREFIX }}" >> $GITHUB_ENV
              echo "STACK_PREFIX Empty "
