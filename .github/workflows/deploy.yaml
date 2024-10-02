@@ -1,0 +1,84 @@
+name: deploy 🚀
+on:
+  workflow_dispatch:
+    inputs:
+      BRANCH:
+        description: 'Choose the branch to use.'
+        default: 'develop'
+        type: string
+        required: true
+      ACCOUNT:
+        description: 'Choose account to deploy to'
+        default: 'sp-dev'
+        type: choice
+        options:
+          - sp-dev
+          - sp-stg
+          - sp-prd
+      STACK_PREFIX:
+        description: 'Specify the stack prefix (if personal stack). Example: stack prefix of mz will result in tokeniser-api-cdk-sp-dev-mz-shared'
+        type: string
+      STACK:
+        description: 'Choose the stack to deploy/update'
+        type: choice
+        options:
+            - dashboard
+            - ecs
+            - redis
+            - rds
+            - s3upload
+            - shared
+      DEPLOY_EXCLUSIVE:
+        description: 'Flag to deploy/update ONLY the selected stack'
+        type: boolean
+        default: false
+      SKIP_CDK_DIFF:
+        description: 'Flag to skip aws cdk diff result and force deployment. It is required for AMI update'
+        type: boolean
+        default: false
+      STACK_PROFILE:
+        description: 'Choose the stack profile to deploy. Example: Choosing large will deploy large instances of rds, redis and ecs'
+        type: choice
+        options:
+          - default
+          - prd-default
+          - medium
+          - large
+      DOCKER_IMAGE_TAG:
+        description: 'Choose the docker image tag to deploy, For example, feature-GENPME-4-cdk-migration-1'
+        type: string
+        required: true
+        default: 'latest'
+      CR_NUMBER:
+        description: 'If it is a prod deployment and you have a CR, specify it here'
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  CONFIG: tokeniser.env
+
+run-name: "deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_IMAGE_TAG }}"
+jobs:
+  pre-deploy:
+    - name: pre-deploy
+      runs-on: ubuntu-latest
+
+    - name: validate-input
+      run: |
+        if [[ "${{ inputs.STACK_PROFILE }}" == "prd-default" && "${{ inputs.ACCOUNT }}" == "sp-stg" ]]; then
+          echo "Unsupported parameter. The STACK_PROFILE 'prd-default' only supported in 'sp-stg' account"
+          exit 1
+        fi
+
+    - name: prepare-command
+      run: |
+        stackEnvPrefixName = "${inputs.ACCOUNT}"
+        if [[ "${{ inputs.STACK_PREFIX }}" == "" ]]; then
+          stackPrefix = ${inputs.STACK_PREFIX^^}
+          stackPrefixCdkContext = "-c stackPrefix=${stackPrefix} -c stackProfile=${params.STACK_PROFILE} -c dockerimagetag=${params.DOCKER_IMAGE_TAG} -c ecscolour=${ECS_DEPLOYMENT} -c ecslive=${ECS_LIVE_STACK}"
+          stackEnvPrefixName = "${stackEnvPrefixName}-${stackPrefix}"
+        else 
+        fi
