@@ -79,8 +79,10 @@ jobs:
         id: deploy-parameter
         run: |
           stackEnvPrefixName="${{ inputs.ACCOUNT }}"
+          stackPrefix = ''
+          stackPrefixCdkContext = ''
           if [[ "${{ inputs.STACK_PREFIX }}" == "" ]]; then
-            stackPrefix="${{ inputs.STACK_PREFIX }}"
+            stackPrefix=${{ inputs.STACK_PREFIX }}
             stackPrefixCdkContext="-c stackPrefix=${{ stackPrefix }} -c stackProfile=${{ inputs.STACK_PROFILE }} -c dockerimagetag=${{ inputs.DOCKER_IMAGE_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}"
             stackEnvPrefixName="${{ stackEnvPrefixName }}-${{ stackPrefix }}"
           else 
