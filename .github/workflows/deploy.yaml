@@ -59,6 +59,9 @@ defaults:
 
 env:
   CONFIG: tokeniser.env
+  ECS_DEPLOYMENT: 'blue'
+  ECS_LIVE_STACK: 'blue'
+  STACK_DEPLOYMENT: true
 
 run-name: "deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_IMAGE_TAG }}"
 jobs:
@@ -73,12 +76,23 @@ jobs:
           exit 1
         fi
 
-    - name: prepare-command
+    - name: Set Stack Parameters
+      id: deploy-parameter
       run: |
         stackEnvPrefixName = "${inputs.ACCOUNT}"
         if [[ "${{ inputs.STACK_PREFIX }}" == "" ]]; then
-          stackPrefix = ${inputs.STACK_PREFIX^^}
-          stackPrefixCdkContext = "-c stackPrefix=${stackPrefix} -c stackProfile=${params.STACK_PROFILE} -c dockerimagetag=${params.DOCKER_IMAGE_TAG} -c ecscolour=${ECS_DEPLOYMENT} -c ecslive=${ECS_LIVE_STACK}"
-          stackEnvPrefixName = "${stackEnvPrefixName}-${stackPrefix}"
+          stackPrefix=${inputs.STACK_PREFIX^^}
+          stackPrefixCdkContext="-c stackPrefix=${stackPrefix} -c stackProfile=${params.STACK_PROFILE} -c dockerimagetag=${params.DOCKER_IMAGE_TAG} -c ecscolour=${ECS_DEPLOYMENT} -c ecslive=${ECS_LIVE_STACK}"
+          stackEnvPrefixName="${stackEnvPrefixName}-${stackPrefix}"
         else 
+         stackPrefixCdkContext="-c stackProfile=${params.STACK_PROFILE} -c dockerimagetag=${params.DOCKER_IMAGE_TAG} -c ecscolour=${env.ECS_DEPLOYMENT} -c ecslive=${env.ECS_LIVE_STACK}"
         fi
+        echo "STACK_PREFIX=${stackPrefix}" >> $GITHUB_ENV
+        echo "STACK_PREFIX_CDK_CONTEXT=${stackPrefixCdkContext}" >> $GITHUB_ENV
+        echo "STACK_ENV_PREFIX_NAME=${stackEnvPrefixName}" >> $GITHUB_ENV
+
+    - name: print-parameters
+      run: |
+        echo "STACK_PREFIX: ${{ env.STACK_PREFIX }}"
+        echo "STACK_PREFIX_CDK_CONTEXT: ${{ env.STACK_PREFIX_CDK_CONTEXT }}"
+        echo "STACK_ENV_PREFIX_NAME: ${{ env.STACK_ENV_PREFIX_NAME }}"
