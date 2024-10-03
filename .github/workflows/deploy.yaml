@@ -65,7 +65,7 @@ env:
 
 run-name: "deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_TAG }}"
 jobs:
-  job-summery:
+  input:
     runs-on: ubuntu-latest
     steps:
       - name: Job summery
