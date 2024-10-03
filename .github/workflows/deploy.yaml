@@ -90,7 +90,7 @@ jobs:
           
       - name: Print Stack Parameters 
         run: |
-          #echo "STACK_PREFIX: ${{ env.stackPrefix }}"
-          #echo "stackPrefixCdkContext: ${{ env.stackPrefixCdkContext }}"
+          echo "STACK_PREFIX: ${{ env.stackPrefix }}"
+          echo "stackPrefixCdkContext: ${{ env.stackPrefixCdkContext }}"
 
           
