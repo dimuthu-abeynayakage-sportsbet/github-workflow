@@ -85,7 +85,7 @@ jobs:
              echo "stackPrefix new: ${{ env.stackPrefix }} "
           else 
             echo "STACK_PREFIX not Empty "
-            echo "stackPrefixCdkContext="-c stackProfile=${{ inputs.STACK_PROFILE }} -c dockerimagetag=${{ inputs.DOCKER_IMAGE_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}" >> $GITHUB_ENV
+            echo "stackPrefixCdkContext=-c stackProfile=${{ inputs.STACK_PROFILE }} -c dockerimagetag=${{ inputs.DOCKER_IMAGE_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}" >> $GITHUB_ENV
           fi
           
       - name: Print Stack Parameters 
