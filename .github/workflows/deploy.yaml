@@ -65,6 +65,24 @@ env:
 
 run-name: "deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_TAG }}"
 jobs:
+  job-summery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Job summery
+        run: |
+         {
+          echo "| Name | Value |"
+          echo "| -------------- | ----------------- |"
+          echo "| BRANCH | ${{ inputs.BRANCH }} |"
+          echo "| ACCOUNT | ${{ inputs.ACCOUNT }} |"
+          echo "| STACK_PREFIX | ${{ inputs.STACK_PREFIX }} |"
+          echo "| STACK | ${{ inputs.STACK }} |"
+          echo "| DEPLOY_EXCLUSIVE | ${{ inputs.DEPLOY_EXCLUSIVE }} |"
+          echo "| SKIP_CDK_DIFF | ${{ inputs.SKIP_CDK_DIFF }} |"
+          echo "| DOCKER_TAG | ${{ inputs.DOCKER_TAG }} |"
+          echo "| CR_NUMBER | ${{ inputs.CR_NUMBER }} |"
+         } >> $GITHUB_STEP_SUMMARY
+        
   pre-deploy:
     runs-on: ubuntu-latest
     steps:
@@ -74,19 +92,6 @@ jobs:
             echo "Unsupported parameter. The STACK_PROFILE 'prd-default' only supported in 'sp-stg' account"
             exit 1
           fi
-          
-      - name: Create Deploy Summary
-        run: |
-         {
-          echo "| Name | Value |"
-          echo "| -------------- | ----------------- |"
-          echo "| ACCOUNT | ${{ inputs.ACCOUNT }} |"
-          echo "| STACK_PREFIX | ${{ inputs.STACK_PREFIX }} |"
-          echo "| STACK | ${{ inputs.STACK }} |"
-          echo "| DEPLOY_EXCLUSIVE | ${{ inputs.DEPLOY_EXCLUSIVE }} |"
-          echo "| DOCKER_TAG | ${{ inputs.DOCKER_TAG }} |"
-          echo "| CR_NUMBER | ${{ inputs.CR_NUMBER }} |"
-         } >> $GITHUB_STEP_SUMMARY
         
       - name: Print Input Parameters
         run: | 
