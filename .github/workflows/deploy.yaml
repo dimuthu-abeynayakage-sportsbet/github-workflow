@@ -80,9 +80,9 @@ jobs:
         run: |
           stackEnvPrefixName="${{ inputs.ACCOUNT }}"
           if [[ ! -z '${{ inputs.STACK_PREFIX }}' ]]; then
-             echo "stackPrefix=${{ inputs.STACK_PREFIX }}" >> $GITHUB_ENV
+             echo "stackPrefix123=${{ inputs.STACK_PREFIX }}" >> $GITHUB_ENV
              echo "STACK_PREFIX Empty "
-             echo "stackPrefix new: ${{ stackPrefix }} "
+             echo "stackPrefix new: ${{ stackPrefix345 }} "
           else 
             echo "STACK_PREFIX not Empty "
             echo "stackPrefixCdkContext="-c stackProfile=${{ inputs.STACK_PROFILE }} -c dockerimagetag=${{ inputs.DOCKER_IMAGE_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}" >> $GITHUB_ENV
@@ -90,7 +90,7 @@ jobs:
           
       - name: Print Stack Parameters 
         run: |
-          echo "STACK_PREFIX: ${{ env.stackPrefix }}"
-          echo "stackPrefixCdkContext: ${{ env.stackPrefixCdkContext }}"
+          #echo "STACK_PREFIX: ${{ env.stackPrefix }}"
+          #echo "stackPrefixCdkContext: ${{ env.stackPrefixCdkContext }}"
 
           
