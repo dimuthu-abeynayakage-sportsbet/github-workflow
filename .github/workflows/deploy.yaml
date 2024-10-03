@@ -85,6 +85,8 @@ jobs:
         
   pre-deploy:
     runs-on: ubuntu-latest
+    outputs:
+      job_name: ${{ steps.job-name.outputs.JOB_NAME }}
     steps:
       - name: Validate Input
         run: |
@@ -121,7 +123,7 @@ jobs:
     name: deploy-${{ needs.pre-deploy.outputs.job_name }}
     runs-on: ubuntu-latest
     environment: ${{ inputs.ACCOUNT }}
-    needs: pre-deploy
+    needs: [pre-deploy,job-summery]
 
     steps:
       - name: Checkout Repo
