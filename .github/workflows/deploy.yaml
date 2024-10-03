@@ -44,7 +44,7 @@ on:
           - prd-default
           - medium
           - large
-      DOCKER_IMAGE_TAG:
+      DOCKER_TAG:
         description: 'Choose the docker image tag to deploy, For example, feature-GENPME-4-cdk-migration-1'
         type: string
         required: true
@@ -74,24 +74,38 @@ jobs:
             echo "Unsupported parameter. The STACK_PROFILE 'prd-default' only supported in 'sp-stg' account"
             exit 1
           fi
+      - name: Print Input Parameters
+        run: | 
+          echo "ACCOUNT: ${{ inputs.ACCOUNT }}"
+          echo "STACK_PREFIX: ${{ inputs.STACK_PREFIX }}"
+          echo "STACK: ${{ inputs.STACK }}"
+          #echo "SCALING_PROFILE: ${{ inputs.SCALING_PROFILE }}"
+          #echo "FORCE_DEPLOY: ${{ inputs.FORCE_DEPLOY }}"
+          echo "DEPLOY_EXCLUSIVE: ${{ inputs.DEPLOY_EXCLUSIVE }}"
+          #echo "SAFE_MODE: ${{ inputs.SAFE_MODE }}"
+          echo "DOCKER_TAG: ${{ inputs.DOCKER_TAG }}"
+          echo "CR_NUMBER: ${{ inputs.CR_NUMBER }}"
 
-      - name: Set Stack Parameters
-        id: deploy-parameter
+      - if: ${{ inputs.STACK_PREFIX != '' }}
+        name: Ensure STACK_PREFIX is lower case
+        id: stack-prefix
         run: |
-          stackEnvPrefixName="${{ inputs.ACCOUNT }}"
-          if [[ ! -z '${{ inputs.STACK_PREFIX }}' ]]; then
-             echo "stackPrefix=${{ inputs.STACK_PREFIX }}" >> $GITHUB_ENV
-             echo "stackPrefixCdkContext=-c stackPrefix=${{ inputs.STACK_PREFIX }} -c stackProfile=${{ inputs.STACK_PROFILE }} -c dockerimagetag=${{ env.DOCKER_IMAGE_TAG }} -c ecscolour=${{ env.ECS_LIVE_STACK }} -c ecslive=${{ env.ECS_LIVE_STACK }}" >> $GITHUB_ENV
-             echo "STACK_PREFIX Empty "
-             echo "env.stackPrefix new: ${{ env.stackPrefix }} "
-          else 
-            echo "STACK_PREFIX not Empty "
-            echo "stackPrefixCdkContext=-c stackProfile=${{ inputs.STACK_PROFILE }} -c dockerimagetag=${{ inputs.DOCKER_IMAGE_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}" >> $GITHUB_ENV
-          fi
-          
-      - name: Print Stack Parameters 
+          sp=${{ inputs.STACK_PREFIX }}
+          echo "STACK_PREFIX_LC=${sp,,}" >> $GITHUB_OUTPUT
+
+      - name: Create Job Name
+        id: job-name
         run: |
-          echo "STACK_PREFIX: ${{ env.stackPrefix }}"
-          echo "stackPrefixCdkContext: ${{ env.stackPrefixCdkContext }}"
+          echo "JOB_NAME=${{ (inputs.STACK_PREFIX != '') && format('{0}-{1}-{2}', inputs.ACCOUNT, steps.stack-prefix.outputs.STACK_PREFIX_LC, inputs.STACK) || format('{0}-{1}', inputs.ACCOUNT, inputs.STACK) }}" >> $GITHUB_OUTPUT
+  
+  deploy:
+    name: deploy-${{ needs.pre-deploy.outputs.job_name }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ACCOUNT }}
+    needs: pre-deploy
+
+    steps:
+      - name: Checkout Repo
+      
 
           
