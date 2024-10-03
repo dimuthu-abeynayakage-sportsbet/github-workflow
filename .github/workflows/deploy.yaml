@@ -74,6 +74,7 @@ jobs:
             echo "Unsupported parameter. The STACK_PROFILE 'prd-default' only supported in 'sp-stg' account"
             exit 1
           fi
+          
       - name: Print Input Parameters
         run: | 
           echo "ACCOUNT: ${{ inputs.ACCOUNT }}"
@@ -106,6 +107,7 @@ jobs:
 
     steps:
       - name: Checkout Repo
+        uses: actions/checkout@v4
       
 
           
