@@ -63,7 +63,7 @@ env:
   ECS_LIVE_STACK: 'blue'
   STACK_DEPLOYMENT: true
 
-run-name: "deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_IMAGE_TAG }}"
+run-name: "deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_TAG }}"
 jobs:
   pre-deploy:
     runs-on: ubuntu-latest
@@ -75,6 +75,19 @@ jobs:
             exit 1
           fi
           
+      - name: Create Deploy Summary
+        run: |
+         {
+          echo "| Name | Value |"
+          echo "| -------------- | ----------------- |"
+          echo "| ACCOUNT | ${{ inputs.ACCOUNT }} |"
+          echo "| STACK_PREFIX | ${{ inputs.STACK_PREFIX }} |"
+          echo "| STACK | ${{ inputs.STACK }} |"
+          echo "| DEPLOY_EXCLUSIVE | ${{ inputs.DEPLOY_EXCLUSIVE }} |"
+          echo "| DOCKER_TAG | ${{ inputs.DOCKER_TAG }} |"
+          echo "| CR_NUMBER | ${{ inputs.CR_NUMBER }} |"
+         } >> $GITHUB_STEP_SUMMARY
+        
       - name: Print Input Parameters
         run: | 
           echo "ACCOUNT: ${{ inputs.ACCOUNT }}"
