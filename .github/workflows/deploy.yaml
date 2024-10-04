@@ -98,7 +98,7 @@ jobs:
         if: contains('sp-prd', inputs.ACCOUNT)
         run: |
           if [[ -z '${{ inputs.CR_NUMBER }}' ]]; then
-            echo "CR Number is required for production deployment. Terminating workflow."
+            echo "::error CR Number is required for production deployment. Terminating workflow."
             exit 1
           else 
             echo "CR Number: ${{ inputs.CR_NUMBER }}. Continuing with production deployment."
