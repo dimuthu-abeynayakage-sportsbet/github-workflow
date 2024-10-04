@@ -47,7 +47,7 @@ env:
 jobs:
   pre-remove:
     name: pre-remove
-    runs-on: [ fargate, '${{ inputs.ACCOUNT }}-general-x64-master' ]
+    runs-on: ubuntu-latest
     outputs:
       stack_prefix_lc: ${{ steps.stack-prefix.outputs.STACK_PREFIX_LC }}
       job_name: ${{ steps.job-name.outputs.JOB_NAME }}
@@ -90,7 +90,7 @@ jobs:
 
   remove:
     name: remove-${{ needs.pre-remove.outputs.job_name }}
-    runs-on: [fargate, '${{ inputs.ACCOUNT }}-general-x64-master']
+    runs-on: ubuntu-latest
     environment: ${{ inputs.ACCOUNT }}
     needs: pre-remove
 
