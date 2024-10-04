@@ -135,7 +135,7 @@ jobs:
           node-version: 18
 
       - name: Setup Yarn
-        working-directory: ./aws-infra/cdk
+        #working-directory: ./aws-infra/cdk
         run: yarn
 
       - name: Print Versions
