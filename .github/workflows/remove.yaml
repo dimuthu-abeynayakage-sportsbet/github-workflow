@@ -1,5 +1,5 @@
 name: Remove ♻️
-run-name: Remove
+run-name: "Remove-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}"
 on:
   workflow_dispatch:
     inputs:
