@@ -11,6 +11,7 @@ on:
       ACCOUNT:
         description: 'Choose account to remove from'
         default: 'sp-dev'
+        type: choice
         options:
           - sp-dev
           - sp-stg
