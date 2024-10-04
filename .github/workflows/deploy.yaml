@@ -63,11 +63,11 @@ env:
   ECS_LIVE_STACK: 'blue'
   STACK_DEPLOYMENT: true
 
-run-name: "Deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_IMAGE_TAG }}"
+run-name: "Deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_TAG }}"
 jobs:
   pre-deploy:
     name: pre-deploy
-    runs-on: [ fargate, '${{ inputs.ACCOUNT }}-general-x64-master' ]
+    runs-on: ubuntu-latest
     outputs:
       job_name: ${{ steps.job-name.outputs.JOB_NAME }}
 
@@ -118,7 +118,7 @@ jobs:
 
   deploy:
     name: deploy-${{ needs.pre-deploy.outputs.job_name }}
-    runs-on: [fargate, '${{ inputs.ACCOUNT }}-general-x64-master']
+    runs-on: ubuntu-latest
     environment: ${{ inputs.ACCOUNT }}
     needs: pre-deploy
 
@@ -128,24 +128,6 @@ jobs:
 
       - name: Read ENV Config
         run: cat .github/workflows/${{ env.CONFIG }} >> $GITHUB_ENV
-
-      - name: Validate Docker Tag
-        if: contains('ecs,dashboard', inputs.STACK)
-        uses: Sportsbet-Internal/sp-common-utils/docker-validate-image-tag@master
-        with:
-          repository: ${{ env.REPOSITORY }}
-          docker-tag: ${{ inputs.DOCKER_TAG }}
-          region: ${{ env.AWS_REGION }}
-
-      - name: Validate CR Number
-        if: contains('sp-prd', inputs.ACCOUNT)
-        run: |
-            if [[ -z '${{ inputs.CR_NUMBER }}' ]]; then
-              echo "CR Number is required for production deployment. Terminating workflow."
-              exit 1
-            else 
-              echo "CR Number: ${{ inputs.CR_NUMBER }}. Continuing with production deployment."
-            fi
 
       - name: Setup Node 18
         uses: actions/setup-node@v4
@@ -179,13 +161,6 @@ jobs:
           echo "stackPrefixCdkContext: ${{ env.stackPrefixCdkContext }}"
           echo "exclusive: ${{ env.exclusive }}"
 
-      - name: Deploy Stack
-        working-directory: ./aws-infra/cdk
-        run: |
-          yarn cdk diff --fail tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ inputs.DOCKER_TAG }} ${{ env.exclusive }}
-          exitcode="$?"
-          echo "DIFF=$exitcode" >> $GITHUB_ENV
-
       - if: ${{ env.DIFF == '1' || inputs.SKIP_CDK_DIFF }}
         name: Deploy Stack
         working-directory: ./aws-infra/cdk
@@ -193,29 +168,6 @@ jobs:
           echo "Deploying... tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }}"
           echo "tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ inputs.DOCKER_TAG }} --require-approval never ${{ env.exclusive }} ${{ env.force }}"
           #yarn cdk deploy tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ inputs.DOCKER_TAG }} --require-approval never ${{ env.exclusive }} ${{ env.force }}
-
-      - name: Get User Slack Information
-        if: always()
-        id: user-slack-info
-        uses: Sportsbet-Internal/sp-common-utils/slack-resolve-channel@master
-
-      - if: success()
-        name: Send Success Slack Message
-        uses: Sportsbet-Internal/sb-action-slack@v1
-        with:
-          bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
-          channel-id: ${{ steps.user-slack-info.outputs.slack-channel-id }}
-          status: ${{ job.status }}
-          add-text-message: 'Deployment: group-betting-${{ inputs.ACCOUNT }}-${{ env.stackName }} success!'
-
-      - if: failure()
-        name: Send Failure Slack Message
-        uses: Sportsbet-Internal/sb-action-slack@v1
-        with:
-          bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
-          channel-id: ${{ steps.user-slack-info.outputs.slack-channel-id }}
-          status: ${{ job.status }}
-          add-text-message: 'Deployment: group-betting-${{ inputs.ACCOUNT }}-${{ env.stackName }} failed!'
 
       - name: Create Deploy Summary
         if: always()
