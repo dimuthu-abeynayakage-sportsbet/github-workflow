@@ -98,10 +98,10 @@ jobs:
         if: contains('sp-prd', inputs.ACCOUNT)
         run: |
           if [[ -z '${{ inputs.CR_NUMBER }}' ]]; then
-            echo "::error::CR Number is required for production deployment. Terminating workflow."
+            echo ":x: CR Number is required for production deployment. Terminating workflow." >> $GITHUB_STEP_SUMMARY
             exit 1
           else 
-            echo "CR Number: ${{ inputs.CR_NUMBER }}. Continuing with production deployment."
+            echo ":white_check_mark: CR Number: ${{ inputs.CR_NUMBER }}. Continuing with production deployment." >> $GITHUB_STEP_SUMMARY
           fi
 
       - if: ${{ inputs.STACK_PREFIX != '' }}
