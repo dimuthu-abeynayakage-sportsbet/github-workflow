@@ -58,12 +58,12 @@ jobs:
           {
           echo "| Name | Value |"
           echo "| -------------- | ----------------- |"
-          echo "BRANCH: ${{ inputs.BRANCH }}"
-          echo "ACCOUNT: ${{ inputs.ACCOUNT }}"
-          echo "STACK_PREFIX: ${{ inputs.STACK_PREFIX }}"
-          echo "STACK: ${{ inputs.STACK }}"
-          echo "DNS_REMOVAL: ${{ inputs.DNS_REMOVAL }}"
-          echo "CR_NUMBER: ${{ inputs.CR_NUMBER }}"
+          echo "| BRANCH | ${{ inputs.BRANCH }}"
+          echo "| ACCOUNT | ${{ inputs.ACCOUNT }}"
+          echo "| STACK_PREFIX | ${{ inputs.STACK_PREFIX }}"
+          echo "| STACK | ${{ inputs.STACK }}"
+          echo "| DNS_REMOVAL | ${{ inputs.DNS_REMOVAL }}"
+          echo "| CR_NUMBER | ${{ inputs.CR_NUMBER }}"
           } >> $GITHUB_STEP_SUMMARY
 
       - if: ${{ inputs.STACK_PREFIX != '' }}
@@ -78,10 +78,10 @@ jobs:
         if: contains('sp-prd', inputs.ACCOUNT)
         run: |
           if [[ -z '${{ inputs.CR_NUMBER }}' ]]; then
-          echo "CR Number is required for production deployment. Terminating workflow."
+            echo ":x: CR Number is required for production deployment. Terminating workflow." >> $GITHUB_STEP_SUMMARY
           exit 1
           else 
-          echo "CR Number: ${{ inputs.CR_NUMBER }}. Continuing with production deployment."
+            echo ":white_check_mark: CR Number: ${{ inputs.CR_NUMBER }}. Continuing with production deployment." >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Create Job Name
