@@ -58,6 +58,7 @@ jobs:
           {
           echo "| Name | Value |"
           echo "| -------------- | ----------------- |"
+          echo "BRANCH: ${{ inputs.BRANCH }}"
           echo "ACCOUNT: ${{ inputs.ACCOUNT }}"
           echo "STACK_PREFIX: ${{ inputs.STACK_PREFIX }}"
           echo "STACK: ${{ inputs.STACK }}"
