@@ -1,4 +1,4 @@
-name: deploy 🚀
+name: Deploy 🚀
 on:
   workflow_dispatch:
     inputs:
@@ -63,49 +63,46 @@ env:
   ECS_LIVE_STACK: 'blue'
   STACK_DEPLOYMENT: true
 
-run-name: "deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_TAG }}"
+run-name: "Deploy-${{ inputs.ACCOUNT }}-${{ inputs.STACK }}-${{ inputs.DOCKER_IMAGE_TAG }}"
 jobs:
-  input:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Job summery
-        run: |
-         {
-          echo "| Name | Value |"
-          echo "| -------------- | ----------------- |"
-          echo "| BRANCH | ${{ inputs.BRANCH }} |"
-          echo "| ACCOUNT | ${{ inputs.ACCOUNT }} |"
-          echo "| STACK_PREFIX | ${{ inputs.STACK_PREFIX }} |"
-          echo "| STACK | ${{ inputs.STACK }} |"
-          echo "| DEPLOY_EXCLUSIVE | ${{ inputs.DEPLOY_EXCLUSIVE }} |"
-          echo "| SKIP_CDK_DIFF | ${{ inputs.SKIP_CDK_DIFF }} |"
-          echo "| DOCKER_TAG | ${{ inputs.DOCKER_TAG }} |"
-          echo "| CR_NUMBER | ${{ inputs.CR_NUMBER }} |"
-         } >> $GITHUB_STEP_SUMMARY
-        
   pre-deploy:
-    runs-on: ubuntu-latest
+    name: pre-deploy
+    runs-on: [ fargate, '${{ inputs.ACCOUNT }}-general-x64-master' ]
     outputs:
       job_name: ${{ steps.job-name.outputs.JOB_NAME }}
+
     steps:
-      - name: Validate Input
+      - name: Job Summery
+        run: |
+          {
+           echo "| Name | Value |"
+           echo "| -------------- | ----------------- |"
+           echo "| BRANCH | ${{ inputs.BRANCH }} |"
+           echo "| ACCOUNT | ${{ inputs.ACCOUNT }} |"
+           echo "| STACK_PREFIX | ${{ inputs.STACK_PREFIX }} |"
+           echo "| STACK | ${{ inputs.STACK }} |"
+           echo "| DEPLOY_EXCLUSIVE | ${{ inputs.DEPLOY_EXCLUSIVE }} |"
+           echo "| SKIP_CDK_DIFF | ${{ inputs.SKIP_CDK_DIFF }} |"
+           echo "| DOCKER_TAG | ${{ inputs.DOCKER_TAG }} |"
+           echo "| CR_NUMBER | ${{ inputs.CR_NUMBER }} |"
+          } >> $GITHUB_STEP_SUMMARY
+
+      - name: Validate Stack Profile
         run: |
           if [[ "${{ inputs.STACK_PROFILE }}" == "prd-default" && "${{ inputs.ACCOUNT }}" == "sp-stg" ]]; then
             echo "Unsupported parameter. The STACK_PROFILE 'prd-default' only supported in 'sp-stg' account"
             exit 1
           fi
-        
-      - name: Print Input Parameters
-        run: | 
-          echo "ACCOUNT: ${{ inputs.ACCOUNT }}"
-          echo "STACK_PREFIX: ${{ inputs.STACK_PREFIX }}"
-          echo "STACK: ${{ inputs.STACK }}"
-          #echo "SCALING_PROFILE: ${{ inputs.SCALING_PROFILE }}"
-          #echo "FORCE_DEPLOY: ${{ inputs.FORCE_DEPLOY }}"
-          echo "DEPLOY_EXCLUSIVE: ${{ inputs.DEPLOY_EXCLUSIVE }}"
-          #echo "SAFE_MODE: ${{ inputs.SAFE_MODE }}"
-          echo "DOCKER_TAG: ${{ inputs.DOCKER_TAG }}"
-          echo "CR_NUMBER: ${{ inputs.CR_NUMBER }}"
+
+      - name: Validate CR Number
+        if: contains('sp-prd', inputs.ACCOUNT)
+        run: |
+          if [[ -z '${{ inputs.CR_NUMBER }}' ]]; then
+            echo "CR Number is required for production deployment. Terminating workflow."
+            exit 1
+          else 
+            echo "CR Number: ${{ inputs.CR_NUMBER }}. Continuing with production deployment."
+          fi
 
       - if: ${{ inputs.STACK_PREFIX != '' }}
         name: Ensure STACK_PREFIX is lower case
@@ -118,16 +115,113 @@ jobs:
         id: job-name
         run: |
           echo "JOB_NAME=${{ (inputs.STACK_PREFIX != '') && format('{0}-{1}-{2}', inputs.ACCOUNT, steps.stack-prefix.outputs.STACK_PREFIX_LC, inputs.STACK) || format('{0}-{1}', inputs.ACCOUNT, inputs.STACK) }}" >> $GITHUB_OUTPUT
-  
+
   deploy:
     name: deploy-${{ needs.pre-deploy.outputs.job_name }}
-    runs-on: ubuntu-latest
+    runs-on: [fargate, '${{ inputs.ACCOUNT }}-general-x64-master']
     environment: ${{ inputs.ACCOUNT }}
-    needs: [pre-deploy,job-summery]
+    needs: pre-deploy
 
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-      
 
-          
+      - name: Read ENV Config
+        run: cat .github/workflows/${{ env.CONFIG }} >> $GITHUB_ENV
+
+      - name: Validate Docker Tag
+        if: contains('ecs,dashboard', inputs.STACK)
+        uses: Sportsbet-Internal/sp-common-utils/docker-validate-image-tag@master
+        with:
+          repository: ${{ env.REPOSITORY }}
+          docker-tag: ${{ inputs.DOCKER_TAG }}
+          region: ${{ env.AWS_REGION }}
+
+      - name: Validate CR Number
+        if: contains('sp-prd', inputs.ACCOUNT)
+        run: |
+            if [[ -z '${{ inputs.CR_NUMBER }}' ]]; then
+              echo "CR Number is required for production deployment. Terminating workflow."
+              exit 1
+            else 
+              echo "CR Number: ${{ inputs.CR_NUMBER }}. Continuing with production deployment."
+            fi
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup Yarn
+        working-directory: ./aws-infra/cdk
+        run: yarn
+
+      - name: Print Versions
+        run: |
+            echo "node: $(node -v)"
+            echo "npm: $(npm -v)"
+            echo "yarn: $(yarn -v)"
+
+      - name: Set Stack Parameters
+        if: always()
+        run: |
+            echo "stackName=${{ (inputs.STACK_PREFIX != '') && format('{0}-{1}', needs.pre-deploy.outputs.stack_prefix_lc, inputs.STACK) || inputs.STACK }}" >> $GITHUB_ENV
+            echo "scalingProfile=${{ (inputs.SCALING_PROFILE != 'normal') && format('-c scalingProfile={0}', inputs.SCALING_PROFILE) || '' }}" >> $GITHUB_ENV
+            echo "stackPrefixCdkContext=${{ (inputs.STACK_PREFIX != '') && format('-c stackPrefix={0}', needs.pre-deploy.outputs.stack_prefix_lc) || '' }}" >> $GITHUB_ENV
+            echo "exclusive=${{ (inputs.DEPLOY_EXCLUSIVE) && '--exclusively' || '' }}" >> $GITHUB_ENV
+            echo "force=${{ (inputs.SKIP_CDK_DIFF) && '--force' || '' }}" >> $GITHUB_ENV
+
+      - name: Print Stack Parameters
+        if: always()
+        run: |
+          echo "stackName: ${{ env.stackName }}"
+          echo "scalingProfile: ${{ env.scalingProfile }}"
+          echo "stackPrefixCdkContext: ${{ env.stackPrefixCdkContext }}"
+          echo "exclusive: ${{ env.exclusive }}"
+
+      - name: Deploy Stack
+        working-directory: ./aws-infra/cdk
+        run: |
+          yarn cdk diff --fail tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ inputs.DOCKER_TAG }} ${{ env.exclusive }}
+          exitcode="$?"
+          echo "DIFF=$exitcode" >> $GITHUB_ENV
+
+      - if: ${{ env.DIFF == '1' || inputs.SKIP_CDK_DIFF }}
+        name: Deploy Stack
+        working-directory: ./aws-infra/cdk
+        run: |
+          echo "Deploying... tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }}"
+          echo "tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ inputs.DOCKER_TAG }} --require-approval never ${{ env.exclusive }} ${{ env.force }}"
+          #yarn cdk deploy tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ inputs.DOCKER_TAG }} --require-approval never ${{ env.exclusive }} ${{ env.force }}
+
+      - name: Get User Slack Information
+        if: always()
+        id: user-slack-info
+        uses: Sportsbet-Internal/sp-common-utils/slack-resolve-channel@master
+
+      - if: success()
+        name: Send Success Slack Message
+        uses: Sportsbet-Internal/sb-action-slack@v1
+        with:
+          bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
+          channel-id: ${{ steps.user-slack-info.outputs.slack-channel-id }}
+          status: ${{ job.status }}
+          add-text-message: 'Deployment: group-betting-${{ inputs.ACCOUNT }}-${{ env.stackName }} success!'
+
+      - if: failure()
+        name: Send Failure Slack Message
+        uses: Sportsbet-Internal/sb-action-slack@v1
+        with:
+          bot-token: ${{ secrets.SLACK_GITHUB_ACTION_TOKEN }}
+          channel-id: ${{ steps.user-slack-info.outputs.slack-channel-id }}
+          status: ${{ job.status }}
+          add-text-message: 'Deployment: group-betting-${{ inputs.ACCOUNT }}-${{ env.stackName }} failed!'
+
+      - name: Create Deploy Summary
+        if: always()
+        uses: Sportsbet-Internal/sp-common-utils/create-deploy-summary@master
+        with:
+          stack-name: group-betting-${{ inputs.ACCOUNT }}-${{ env.stackName }}
+          branch-name: ${{ github.ref_name }}
+          docker-tag: ${{ inputs.DOCKER_TAG }}
+          status: ${{ job.status }}
