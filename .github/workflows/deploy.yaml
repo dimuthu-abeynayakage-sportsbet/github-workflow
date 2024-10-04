@@ -168,12 +168,3 @@ jobs:
           echo "Deploying... tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }}"
           echo "tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ inputs.DOCKER_TAG }} --require-approval never ${{ env.exclusive }} ${{ env.force }}"
           #yarn cdk deploy tokeniser-api-cdk-${{ inputs.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ inputs.DOCKER_TAG }} --require-approval never ${{ env.exclusive }} ${{ env.force }}
-
-      - name: Create Deploy Summary
-        if: always()
-        uses: Sportsbet-Internal/sp-common-utils/create-deploy-summary@master
-        with:
-          stack-name: group-betting-${{ inputs.ACCOUNT }}-${{ env.stackName }}
-          branch-name: ${{ github.ref_name }}
-          docker-tag: ${{ inputs.DOCKER_TAG }}
-          status: ${{ job.status }}
