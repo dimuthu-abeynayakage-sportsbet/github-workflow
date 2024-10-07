@@ -13,12 +13,23 @@ env:
   SKIP_CDK_DIFF: true
   
 jobs:
+  pre-deploy:
+    runs-on: ubuntu-latest
+    outputs:
+      STACK_PREFIX_LC: ${{ steps.stack-prefix.outputs.STACK_PREFIX_LC }}
+    steps:
+      - id: stack-prefix
+        run: |
+         sp=${{ env.STACK_PREFIX }}
+         echo "STACK_PREFIX_LC=${sp,,}" >> $GITHUB_OUTPUT
+    
   test-workflows:
     runs-on: ubuntu-latest
+    needs: pre-deploy
     steps:
       - run: |
             stackPrefixValue=${{ env.STACK_PREFIX }}
-            stackPrefixLowerCase="${stackPrefixValue,,}"
+            stackPrefixLowerCase="${{ jobs.pre-deploy.output.STACK_PREFIX_LC }}"
             echo "stackPrefixLowerCase=${stackPrefixValue,,}"  >> $GITHUB_ENV
             stackPrefix=$([ stackPrefixLowerCase != "" ] && echo "${stackPrefixLowerCase}-" || echo "")
             stackName=$([ env.STACK == "ecs" || env.STACK == "dashboard" ] && echo "${{ env.STACK }}-${{ env.ECS_DEPLOYMENT }}" || echo "${{ env.STACK }}")
