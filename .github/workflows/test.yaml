@@ -5,6 +5,7 @@ env:
   STACK_PREFIX: 'dka'
   STACK: 'ecs'
   ECS_DEPLOYMENT: 'blue'
+  ECS_LIVE_STACK: 'blue'
   STACK_PROFILE: 'default'
   ACCOUNT: 'sp-dev'
   DOCKER_TAG: '123456789-docker'
@@ -22,7 +23,7 @@ jobs:
             stackName=$([ env.STACK == "ecs" || env.STACK == "dashboard" ] && echo "${{ env.STACK }}-${{ env.ECS_DEPLOYMENT }}" || echo "${{ env.STACK }}")
             echo "stackName=${stackPrefix}${stackName}"  >> $GITHUB_ENV
             stackPrefixCdk=$([ stackPrefixLowerCase != "" ] && echo "-c stackPrefix=${stackPrefixLowerCase} " || echo "")
-            stackPrefixCdkContext="-c stackProfile=${{ env.STACK_PROFILE }} -c dockerimagetag=${{ env.DOCKER_IMAGE_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}"
+            stackPrefixCdkContext="-c stackProfile=${{ env.STACK_PROFILE }} -c dockerimagetag=${{ env.DOCKER_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}"
             echo "stackPrefixCdkContext=${stackPrefixCdk}${stackPrefixCdkContext}"  >> $GITHUB_ENV
             echo "exclusive=${{ (env.DEPLOY_EXCLUSIVE) && '--exclusively' || '' }}" >> $GITHUB_ENV
             echo "force=${{ (env.SKIP_CDK_DIFF) && '--force' || '' }}" >> $GITHUB_ENV
