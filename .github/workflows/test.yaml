@@ -17,7 +17,7 @@ jobs:
             stackPrefixValue=${{ env.STACK_PREFIX }}
             stackPrefixLowerCase="${stackPrefixValue,,}"
             stackPrefix=$([ stackPrefixLowerCase != "" ] && echo "${stackPrefixLowerCase}-" || echo "")
-            stackName=$([ env.STACK == "ecs" || env.STACK == "dashboard ] && echo " ${{ env.STACK }}-${{ env.ECS_DEPLOYMENT} }" || echo "${{ env.STACK }}")
+            stackName=$([ env.STACK == "ecs" || env.STACK == "dashboard" ] && echo "${{ env.STACK }}-${{ env.ECS_DEPLOYMENT} }" || echo "${{ env.STACK }}")
             echo "stackName=${stackPrefix}${stackName}"  >> $GITHUB_ENV
             stackPrefixCdk=$([ stackPrefixLowerCase != "" ] && echo "-c stackPrefix=${stackPrefixLowerCase} " || echo "")
             stackPrefixCdkContext="-c stackProfile=${{ env.STACK_PROFILE }} -c dockerimagetag=${{ env.DOCKER_IMAGE_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}"
