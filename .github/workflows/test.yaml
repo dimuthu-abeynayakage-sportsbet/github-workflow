@@ -24,7 +24,7 @@ jobs:
           echo "::error file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
           echo "::workflow-command parameter1={data},parameter2={data}::{command value}"
 
-           stackPrefixLowerCase=${env.STACK_PREFIX,,}
+           stackPrefixLowerCase=${{ env.STACK_PREFIX,, }}
             stackPrefix=$([ stackPrefixLowerCase != "" ] && echo "${{ stackPrefixLowerCase }}-" || echo "")
             stackName=$([ env.STACK == "ecs" || env.STACK == "dashboard ] && echo " ${{ env.STACK }}-${{ env.ECS_DEPLOYMENT} }" || echo "${{ env.STACK }}")
             echo "stackName=${stackPrefix}${stackName}"  >> $GITHUB_ENV
