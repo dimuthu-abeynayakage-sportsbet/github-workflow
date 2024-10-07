@@ -28,17 +28,17 @@ jobs:
     needs: pre-deploy
     steps:
       - run: |
-            stackPrefixValue=${{ env.STACK_PREFIX }}
-            stackPrefixLowerCase="${{ needs.pre-deploy.output.STACK_PREFIX_LC }}"
-            stackPrefix=$([ stackPrefixLowerCase != "" ] && echo "${stackPrefixLowerCase}-" || echo "")
-            stackName=$([ env.STACK == "ecs" || env.STACK == "dashboard" ] && echo "${{ env.STACK }}-${{ env.ECS_DEPLOYMENT }}" || echo "${{ env.STACK }}")
-            echo "stackName=${stackPrefix}${stackName}"  >> $GITHUB_ENV
-            stackPrefixCdk=$([ stackPrefixLowerCase != "" ] && echo "-c stackPrefix=${stackPrefixLowerCase} " || echo "")
-            stackPrefixCdkContext="-c stackProfile=${{ env.STACK_PROFILE }} -c dockerimagetag=${{ env.DOCKER_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}"
-            echo "stackPrefixCdkContext=${stackPrefixCdk}${stackPrefixCdkContext}"  >> $GITHUB_ENV
-            echo "exclusive=${{ (env.DEPLOY_EXCLUSIVE) && '--exclusively' || '' }}" >> $GITHUB_ENV
-            echo "force=${{ (env.SKIP_CDK_DIFF) && '--force' || '' }}" >> $GITHUB_ENV
-            echo "stackPrefixLowerCase: ${stackPrefixLowerCase}"
+            stackPrefixValue="${{ needs.pre-deploy.output.STACK_PREFIX_LC }}"
+            stackPrefix=$([ stackPrefixValue != "" ] && echo "${stackPrefixValue}-" || echo "")
+            echo "stackPrefix: ${stackPrefix}"
+            #stackName=$([ env.STACK == "ecs" || env.STACK == "dashboard" ] && echo "${{ env.STACK }}-${{ env.ECS_DEPLOYMENT }}" || echo "${{ env.STACK }}")
+            #echo "stackName=${stackPrefix}${stackName}"  >> $GITHUB_ENV
+            #stackPrefixCdk=$([ stackPrefixLowerCase != "" ] && echo "-c stackPrefix=${stackPrefixLowerCase} " || echo "")
+            #stackPrefixCdkContext="-c stackProfile=${{ env.STACK_PROFILE }} -c dockerimagetag=${{ env.DOCKER_TAG }} -c ecscolour=${{ env.ECS_DEPLOYMENT }} -c ecslive=${{ env.ECS_LIVE_STACK }}"
+            #echo "stackPrefixCdkContext=${stackPrefixCdk}${stackPrefixCdkContext}"  >> $GITHUB_ENV
+            #echo "exclusive=${{ (env.DEPLOY_EXCLUSIVE) && '--exclusively' || '' }}" >> $GITHUB_ENV
+            #echo "force=${{ (env.SKIP_CDK_DIFF) && '--force' || '' }}" >> $GITHUB_ENV
+            #echo "stackPrefixLowerCase: ${stackPrefixLowerCase}"
             
       - run: |
           echo "yarn cdk diff --fail tokeniser-api-cdk-${{ env.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ env.DOCKER_TAG }} ${{ env.exclusive }}"
