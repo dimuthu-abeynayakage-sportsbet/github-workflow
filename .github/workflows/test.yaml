@@ -2,14 +2,12 @@ name: Test Actions
 on: push
 
 jobs:
-  cleanup-workflows:
+  test-workflows:
     runs-on: ubuntu-latest
     steps:
       - run: |
           dddd2="github_merge_test_dka"
-          if [ "github_merge_test_dka" == github_merge_test_dka ]; then
-             echo ":x: Artifact not uploaded to stg as it is not a release branch"
-          else 
-            echo ":x: xcssdsddch"
+          if [[ "github_merge_test_dka" == github_merge_test_dka* ]]; then
+            echo ":x: Artifact not uploaded to stg as it is not a release branch"
           fi
         
