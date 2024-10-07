@@ -39,6 +39,7 @@ jobs:
             #echo "exclusive=${{ (env.DEPLOY_EXCLUSIVE) && '--exclusively' || '' }}" >> $GITHUB_ENV
             #echo "force=${{ (env.SKIP_CDK_DIFF) && '--force' || '' }}" >> $GITHUB_ENV
             #echo "stackPrefixLowerCase: ${stackPrefixLowerCase}"
+            echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             
       - run: |
           echo "yarn cdk diff --fail tokeniser-api-cdk-${{ env.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ env.DOCKER_TAG }} ${{ env.exclusive }}"
