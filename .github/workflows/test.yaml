@@ -14,16 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          dddd2="github_merge_test_dka"
-          if [[ "github_merge_test_dka" == github_merge_test_dka* ]]; then
-            echo ":x: Artifact not uploaded to stg as it is not a release branch"
-          fi
-          echo "::notice:: Data wewweweww rgthtwe"
-          echo "::debug::Set the Octocat variable"
-          echo "::warning file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
-          echo "::error file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
-          echo "::workflow-command parameter1={data},parameter2={data}::{command value}"
-
             stackPrefixValue=${{ env.STACK_PREFIX }}
             stackPrefixLowerCase=${stackPrefixValue,,}
             stackPrefix=$([ stackPrefixLowerCase != "" ] && echo "${{ stackPrefixLowerCase }}-" || echo "")
