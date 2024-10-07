@@ -29,7 +29,7 @@ jobs:
     steps:
       - run: |
             stackPrefixValue=${{ env.STACK_PREFIX }}
-            stackPrefixLowerCase="${{ jobs.pre-deploy.output.STACK_PREFIX_LC }}"
+            stackPrefixLowerCase="${{ needs.pre-deploy.output.STACK_PREFIX_LC }}"
             echo "stackPrefixLowerCase=${stackPrefixValue,,}"  >> $GITHUB_ENV
             stackPrefix=$([ stackPrefixLowerCase != "" ] && echo "${stackPrefixLowerCase}-" || echo "")
             stackName=$([ env.STACK == "ecs" || env.STACK == "dashboard" ] && echo "${{ env.STACK }}-${{ env.ECS_DEPLOYMENT }}" || echo "${{ env.STACK }}")
