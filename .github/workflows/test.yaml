@@ -10,5 +10,5 @@ jobs:
           if [[ "github_merge_test_dka" == github_merge_test_dka* ]]; then
             echo ":x: Artifact not uploaded to stg as it is not a release branch"
           fi
-          echo "::notice Data wewe" >> $GITHUB_STEP_SUMMARY
+          echo "::notice:: Data wewweweww rgthtwe" >> $GITHUB_STEP_SUMMARY
         
