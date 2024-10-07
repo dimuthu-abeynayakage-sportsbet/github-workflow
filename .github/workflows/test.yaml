@@ -22,6 +22,7 @@ jobs:
         run: |
          sp=${{ env.STACK_PREFIX }}
          echo "STACK_PREFIX_LC=${sp,,}" >> $GITHUB_OUTPUT
+         echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
     
   test-workflows:
     runs-on: ubuntu-latest
