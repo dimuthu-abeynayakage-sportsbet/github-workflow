@@ -2,7 +2,7 @@ name: Test Actions
 on: push
 
 env:
-  STACK_PREFIX: 'dka'
+  STACK_PREFIX: ''
   STACK: 'ecs'
   ECS_DEPLOYMENT: 'blue'
   ECS_LIVE_STACK: 'blue'
