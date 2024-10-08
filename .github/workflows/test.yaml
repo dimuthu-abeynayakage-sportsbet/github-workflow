@@ -47,6 +47,8 @@ jobs:
 
       - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          ref: master
           
       - name: Change to working director
         run: |
