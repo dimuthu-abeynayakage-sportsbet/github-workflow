@@ -40,7 +40,7 @@ jobs:
          echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
          echo "Repo: ${{ github.repository }}"
          echo "actor: ${{ github.actor  }}"
-         echo "myValue+=${{ github.repository }}" >> $GITHUB_ENV
+         echo "myValue=${{ github.repository }}" >> $GITHUB_ENV
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
