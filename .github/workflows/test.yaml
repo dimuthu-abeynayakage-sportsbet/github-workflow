@@ -35,10 +35,12 @@ jobs:
       - id: stack-prefix
         run: |
          sp=${{ env.STACK_PREFIX }}
+         myValue='URL===> '
          echo "STACK_PREFIX_LC=${sp,,}" >> $GITHUB_OUTPUT
          echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
          echo "Repo: ${{ github.repository }}"
          echo "actor: ${{ github.actor  }}"
+         echo "myValue+=${{ github.repository }}" >> $GITHUB_ENV
     
   test-workflows:
     runs-on: ubuntu-latest
@@ -57,6 +59,7 @@ jobs:
             #echo "force=${{ (env.SKIP_CDK_DIFF) && '--force' || '' }}" >> $GITHUB_ENV
             #echo "stackPrefixLowerCase: ${stackPrefixLowerCase}"
             echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "myValue: ${{ env.myValue }}"
             
       - run: |
           echo "yarn cdk diff --fail tokeniser-api-cdk-${{ env.ACCOUNT }}-${{ env.stackName }} ${{ env.stackPrefixCdkContext }} ${{ env.scalingProfile }} -c dockerTag=${{ env.DOCKER_TAG }} ${{ env.exclusive }}"
