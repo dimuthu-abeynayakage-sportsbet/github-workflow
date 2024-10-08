@@ -13,8 +13,8 @@ on:
         - server_3
 
 env:
-  STACK_PREFIX: 'dka'
-  STACK: 'ecs'
+  #STACK_PREFIX: 'dka'
+  #STACK: 'ecs'
   ECS_DEPLOYMENT: 'blue'
   ECS_LIVE_STACK: 'blue'
   STACK_PROFILE: 'default'
@@ -22,11 +22,41 @@ env:
   DOCKER_TAG: '123456789-docker'
   DEPLOY_EXCLUSIVE: true
   SKIP_CDK_DIFF: true
-  server_1: "i-xxxxxxxxxxxxxxxxx"
-  server_2: "i-xxxxxxxxxxxxxxxxx"
-  server_3: "i-xxxxxxxxxxxxxxxxx"
+  BRANCH: 'develop'
+  STACK_PREFIX: ''
+  STACK_DEPLOYMENT: true
+  EXCLUSIVE_DEPLOYMENT: false
+  STACK: 'api'
+  API_DOCKER_IMAGE_TAG: 'feature-gf-1115-fix-gms-error-alarm-api-3'
+  STREAMING_DOCKER_IMAGE_TAG: 'develop-streaming-213'
+  LOG_LEVEL: 'INFO'
+  CR_NUMBER: 'CR1234567890'
   
 jobs:
+  print-varable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Stack Parameters
+        run: |
+          stackPrefixContext=$([ -z "${{ env.STACK_PREFIX }}" ] && echo "-c stackPrefix=${{ env.STACK_PREFIX }} " || echo "")
+          stackName="generosity-merchandising-${{ env.ACCOUNT }}-${{ env.STACK }}"
+          
+          stackPrefix=$([ -z "${{ needs.pre-deploy.output.STACK_PREFIX_LC }}" ] && echo "${{ needs.pre-deploy.output.STACK_PREFIX_LC }}-" || echo "")
+          echo "fullStackName=${stackPrefix}${stackName}" >> $GITHUB_ENV
+          
+          if [[ '${{ env.STACK }}' = 'api' ]]; then
+              echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
+          else if [[ '${{ env.STACK }}' = 'streaming' ]]; then
+              echo "stackPrefixContext=${stackPrefixContext}-c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
+          else  
+              echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
+          fi
+          
+          exclusive=$([ ${{ env.EXCLUSIVE_DEPLOYMENT }} ] && echo "--exclusively" || echo "")
+           echo "Printing exclusive=$exclusive"
+           echo "Printing EXCLUSIVE_DEPLOYMENT=${{ env.EXCLUSIVE_DEPLOYMENT }}"
+          echo "exclusive=$exclusive" >> $GITHUB_ENV
+          
   pre-deploy:
     runs-on: ubuntu-latest
     outputs:
