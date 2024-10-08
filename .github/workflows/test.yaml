@@ -44,6 +44,15 @@ jobs:
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+          
+      - name: Change to working director
+        run: |
+          pwd
+          ls -lart
+          cat my-file.txt
     
   test-workflows:
     runs-on: ubuntu-latest
