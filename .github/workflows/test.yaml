@@ -45,7 +45,7 @@ jobs:
           echo "fullStackName=${stackPrefix}${stackName}" >> $GITHUB_ENV
           if [[ '${{ env.STACK }}' = 'api' ]]; then
               echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
-          else if [[ '${{ env.STACK }}' = 'streaming' ]]; then
+          elif [[ '${{ env.STACK }}' = 'streaming' ]]; then
               echo "stackPrefixContext=${stackPrefixContext}-c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
           else  
               echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
