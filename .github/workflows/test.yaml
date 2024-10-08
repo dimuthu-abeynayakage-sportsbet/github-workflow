@@ -1,5 +1,16 @@
 name: Test Actions
-on: push
+on: 
+  push:
+  workflow_dispatch:
+    inputs:
+      server_name:
+        description: The server where you wish to deploy & test your code.
+        required: true
+        type: choice
+        options:
+        - server_1
+        - server_2
+        - server_3
 
 env:
   STACK_PREFIX: 'dka'
@@ -11,6 +22,9 @@ env:
   DOCKER_TAG: '123456789-docker'
   DEPLOY_EXCLUSIVE: true
   SKIP_CDK_DIFF: true
+  server_1: "i-xxxxxxxxxxxxxxxxx"
+  server_2: "i-xxxxxxxxxxxxxxxxx"
+  server_3: "i-xxxxxxxxxxxxxxxxx"
   
 jobs:
   pre-deploy:
