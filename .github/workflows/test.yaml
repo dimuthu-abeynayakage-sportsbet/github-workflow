@@ -55,7 +55,7 @@ jobs:
           exclusive=$([ ${{ env.EXCLUSIVE_DEPLOYMENT }} ] && echo "--exclusively" || echo "")
            echo "Printing exclusive=${exclusive}"
            echo "Printing EXCLUSIVE_DEPLOYMENT=${{ env.EXCLUSIVE_DEPLOYMENT }}"
-          echo "exclusive=${exclusive}" >> $GITHUB_ENV
+          #echo "exclusive=${exclusive}" >> $GITHUB_ENV
           
   pre-deploy:
     runs-on: ubuntu-latest
