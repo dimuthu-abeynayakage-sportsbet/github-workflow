@@ -44,18 +44,6 @@ jobs:
           stackPrefix=$([ -z "${{ needs.pre-deploy.output.STACK_PREFIX_LC }}" ] && echo "${{ needs.pre-deploy.output.STACK_PREFIX_LC }}-" || echo "")
           echo "fullStackName=${stackPrefix}${stackName}" >> $GITHUB_ENV
           
-          if [[ '${{ env.STACK }}' = 'api' ]]; then
-              echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
-          else if [[ '${{ env.STACK }}' = 'streaming' ]]; then
-              echo "stackPrefixContext=${stackPrefixContext}-c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
-          else  
-              echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
-          fi
-          
-          exclusive=$([ ${{ env.EXCLUSIVE_DEPLOYMENT }} ] && echo "--exclusively" || echo "")
-           echo "Printing exclusive=${exclusive}"
-           echo "Printing EXCLUSIVE_DEPLOYMENT=${{ env.EXCLUSIVE_DEPLOYMENT }}"
-          #echo "exclusive=${exclusive}" >> $GITHUB_ENV
           
   pre-deploy:
     runs-on: ubuntu-latest
