@@ -43,19 +43,17 @@ jobs:
           
           stackPrefix=$([ -z "${{ needs.pre-deploy.output.STACK_PREFIX_LC }}" ] && echo "${{ needs.pre-deploy.output.STACK_PREFIX_LC }}-" || echo "")
           echo "fullStackName=${stackPrefix}${stackName}" >> $GITHUB_ENV
+          
           if [[ '${{ env.STACK }}' = 'api' ]]; then
               echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
-          elif [[ '${{ env.STACK }}' = 'streaming' ]]; then
+          else if [[ '${{ env.STACK }}' = 'streaming' ]]; then
               echo "stackPrefixContext=${stackPrefixContext}-c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
           else  
               echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
           fi
-           exclusive=$([ ${{ env.EXCLUSIVE_DEPLOYMENT }} = true  ] && echo "--exclusively" || echo "")
-           exclusive2=$([  ${{ env.EXCLUSIVE_DEPLOYMENT }} = false ] && echo "--exclusively" || echo "")
-           echo "Printing exclusive=${exclusive}"
-           echo "Printing exclusive2=${exclusive2}"
+
+          exclusive=$([ ${{ env.EXCLUSIVE_DEPLOYMENT }} = true  ] && echo "--exclusively" || echo "")
           echo "exclusive=${exclusive}" >> $GITHUB_ENV
-          echo "exclusive2=${exclusive2}" >> $GITHUB_ENV
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
