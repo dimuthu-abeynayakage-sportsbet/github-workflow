@@ -1,4 +1,4 @@
-name: Test Actions
+name: Chron Actions
 
 env:
     CRON_JOB1: '58 11 * * 1-5'
