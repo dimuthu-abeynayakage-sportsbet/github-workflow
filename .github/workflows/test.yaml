@@ -53,7 +53,9 @@ jobs:
           fi
 
           exclusive=$([ ${{ env.EXCLUSIVE_DEPLOYMENT }} = true  ] && echo "--exclusively" || echo "")
+          echo "Printing exclusive=${exclusive}"
           echo "exclusive=${exclusive}" >> $GITHUB_ENV
+      
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
