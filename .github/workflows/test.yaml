@@ -56,7 +56,7 @@ jobs:
           echo "Printing exclusive=${exclusive}"
           echo "exclusive=${exclusive}" >> $GITHUB_ENV
           echo "Branch ${{ github.ref_name }}"
-          echo "Change ${{ github.ref_name//p//-}}"
+          echo "Change ${github.ref_name//p/-}"
       
 
       - run: |
