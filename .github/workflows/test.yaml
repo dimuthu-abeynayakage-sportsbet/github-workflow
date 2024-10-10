@@ -65,7 +65,7 @@ jobs:
           echo "myValue: ${{ env.myValue }}"
           echo "Values exclusive ${{ env.exclusive }}"
           echo "Values exclusive2 ${{ env.exclusive2 }}"
-          echo "[Click](https://www.utctime.net/utc-to-aest-converter){:target='_blank' rel='noopener'}" >> "$GITHUB_STEP_SUMMARY"
+          echo "[Click](https://www.utctime.net/utc-to-aest-converter){:target='_blank'}" >> "$GITHUB_STEP_SUMMARY"
           
           
   pre-deploy:
