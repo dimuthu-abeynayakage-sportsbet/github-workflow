@@ -55,8 +55,10 @@ jobs:
           exclusive=$([ ${{ env.EXCLUSIVE_DEPLOYMENT }} = true  ] && echo "--exclusively" || echo "")
           echo "Printing exclusive=${exclusive}"
           echo "exclusive=${exclusive}" >> $GITHUB_ENV
+
+          branchName=${{ github.ref_name }}
           echo "Branch ${{ github.ref_name }}"
-          echo "Change ${github.ref_name//p/-}"
+          echo "Change ${branchName//p/-}"
       
 
       - run: |
