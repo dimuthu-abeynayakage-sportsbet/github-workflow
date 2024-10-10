@@ -8,6 +8,7 @@ on:
    schedule:
         - cron: '11 00 * * 1-5'
         - cron: '15 00 * * 1-5'
+        - cron: '25 00 * * 1-5'
       
 jobs:
     job1:
