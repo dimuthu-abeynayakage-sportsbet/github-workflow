@@ -1,8 +1,8 @@
 name: Chron Actions
 
 env:
-    CRON_JOB1: '58 11 * * 1-5'
-    CRON_JOB2: '05 12 * * 1-5'
+    CRON_JOB1: '11 00 * * 1-5'
+    CRON_JOB2: '15 00 * * 1-5'
   
 on:
    schedule:
