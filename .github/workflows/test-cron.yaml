@@ -6,8 +6,8 @@ env:
   
 on:
    schedule:
-        - cron: '58 11 * * 1-5'
-        - cron: '05 12 * * 1-5'
+        - cron: '11 00 * * 1-5'
+        - cron: '15 00 * * 1-5'
       
 jobs:
     job1:
