@@ -3,6 +3,8 @@ name: Chron Actions
 env:
     CRON_JOB1: '11 00 * * 1-5'
     CRON_JOB2: '15 00 * * 1-5'
+    TZ: "Australia/Sydney"
+    LOCAL_TIME: "12:00"
   
 on:
    schedule:
@@ -11,6 +13,7 @@ on:
      - cron: '35 23 * * 1-5'
      - cron: '10 04 * * 1-5'
      - cron: '10 03 * * 1-5'
+     - cron: '35 04 * * 1-5'
       
 jobs:
     job1:
@@ -19,9 +22,12 @@ jobs:
 
         steps:
             - run: |
-                export TZ=Australia/Sydney
+                now=$(date +%s)
+                local_time=$(date -d "$LOCAL_TIME" +%s)
+                
                 echo "Current Run: ${{github.event.schedule }}"
-                echo "Time Now: $(date '+%Y-%m-%d %H:%M:%S'"
+                 echo "Now: ${now}"
+                 echo "local_time: ${local_time}"
                 if [[ -z '${{ github.event.schedule == env.CRON_JOB1 }}' ]]; then
                     echo "Run at 1: ${{ env.CRON_JOB1 }}"
                 elif  [[ -z '${{ github.event.schedule == env.CRON_JOB2 }}' ]]; then
