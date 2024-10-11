@@ -60,7 +60,7 @@ jobs:
           echo "Branch ${{ github.ref_name }}"
           echo "Change ${branchName//p/-}"
           apt-get install -y netcat
-          nc
+        
       
 
       - run: |
