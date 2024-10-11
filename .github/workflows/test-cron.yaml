@@ -28,6 +28,7 @@ jobs:
                 echo "Current Run: ${{github.event.schedule }}"
                  echo "Now: ${now}"
                  echo "local_time: ${local_time}"
+                 echo "Time Now AUS : $(local_time '+%Y-%m-%d %H:%M:%S')"
                 if [[ -z '${{ github.event.schedule == env.CRON_JOB1 }}' ]]; then
                     echo "Run at 1: ${{ env.CRON_JOB1 }}"
                 elif  [[ -z '${{ github.event.schedule == env.CRON_JOB2 }}' ]]; then
