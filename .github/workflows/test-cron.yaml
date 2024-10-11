@@ -9,6 +9,7 @@ on:
      - cron: '10 03 * * 1-5'
      - cron: '15 03 * * 1-5'
      - cron: '35 23 * * 1-5'
+     - cron: '25 03 * * 1-5'
       
 jobs:
     job1:
@@ -17,8 +18,9 @@ jobs:
 
         steps:
             - run: |
+                export TZ=Australia/Sydney
                 echo "Current Run: ${{github.event.schedule }}"
-                echo "Time Now: $(date '+%Y-%m-%d %H:%M:%S')"
+                echo "Time Now: $(date '+%Y-%m-%d %H:%M:%S'"
                 if [[ -z '${{ github.event.schedule == env.CRON_JOB1 }}' ]]; then
                     echo "Run at 1: ${{ env.CRON_JOB1 }}"
                 elif  [[ -z '${{ github.event.schedule == env.CRON_JOB2 }}' ]]; then
