@@ -1,1 +1,1 @@
-some data for the file
+var dockerImageTag = '1132071524099';
