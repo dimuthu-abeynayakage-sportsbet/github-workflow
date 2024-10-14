@@ -38,23 +38,7 @@ jobs:
     steps:
       - name: Set Stack Parameters
         run: |
-          stackPrefixContext=$([ -z "${{ env.STACK_PREFIX }}" ] && echo "-c stackPrefix=${{ env.STACK_PREFIX }} " || echo "")
-          stackName="generosity-merchandising-${{ env.ACCOUNT }}-${{ env.STACK }}"
           
-          stackPrefix=$([ -z "${{ needs.pre-deploy.output.STACK_PREFIX_LC }}" ] && echo "${{ needs.pre-deploy.output.STACK_PREFIX_LC }}-" || echo "")
-          echo "fullStackName=${stackPrefix}${stackName}" >> $GITHUB_ENV
-          
-          if [[ '${{ env.STACK }}' = 'api' ]]; then
-              echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
-          elif [[ '${{ env.STACK }}' = 'streaming' ]]; then
-              echo "stackPrefixContext=${stackPrefixContext}-c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
-          else  
-              echo "stackPrefixContext=${stackPrefixContext}-c apidockerimagetag=${{ env.API_DOCKER_IMAGE_TAG }} -c streamingdockerimagetag=${{ env.STREAMING_DOCKER_IMAGE_TAG }} -c loglevel=${{ env.LOG_LEVEL }}"  >> $GITHUB_ENV
-          fi
-
-          exclusive=$([ ${{ env.EXCLUSIVE_DEPLOYMENT }} = true  ] && echo "--exclusively" || echo "")
-          echo "Printing exclusive=${exclusive}"
-          echo "exclusive=${exclusive}" >> $GITHUB_ENV
 
           calculatedSha=$(git rev-parse --short ${{ github.sha }})
 
@@ -73,7 +57,7 @@ jobs:
           
   pre-deploy:
     runs-on: ubuntu-latest
-    
+    if: false
     outputs:
       STACK_PREFIX_LC: ${{ steps.stack-prefix.outputs.STACK_PREFIX_LC }}
     steps:
