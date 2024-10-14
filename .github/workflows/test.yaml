@@ -49,10 +49,9 @@ jobs:
           echo "github.sha: ${{ github.sha }}"
           echo "github.run_id: ${{ github.run_id }}"
           echo "github.run_number: ${{ github.run_number }}"
-          #git config --global user.email "actions@github.com"
-	  git config --global user.name "GitHub Actions"
-          dockerImage='${{ github.run_id }}${{ github.run_number }}'
+          dockerImage="${{ github.run_id }}${{ github.run_number }}"
           echo "dockerImage1: ${dockerImage}"
+          git config global user.name 'GitHub Actions'
           cat ./version-config.js
           echo "some data for the file" >> ./version-config.js
           echo "After Change"
