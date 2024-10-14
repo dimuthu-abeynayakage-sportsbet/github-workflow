@@ -62,7 +62,7 @@ jobs:
           echo "Branch ${{ github.ref_name }}"
           echo "Change ${branchName//p/-}"
           echo "github.sha: ${{ github.sha }}"
-          echo "calculatedSha: ${calculatedSha}"
+          #echo "calculatedSha: ${calculatedSha}"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
