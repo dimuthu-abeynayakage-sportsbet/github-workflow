@@ -53,7 +53,7 @@ jobs:
           echo "dockerImage1: ${dockerImage}"
           git config --global user.name 'GitHub Actions'
           cat ./version-config.js
-          echo "some data for the file" >> ./version-config.js
+          echo "some data for the file" > ./version-config.js
           echo "After Change"
           cat ./version-config.js
           git add ./version-config.js
