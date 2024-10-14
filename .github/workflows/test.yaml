@@ -51,7 +51,8 @@ jobs:
           echo "github.run_id: ${{ github.run_id }}"
           echo "github.run_number: ${{ github.run_number }}"
           dockerImage='${{ github.run_id }}${{ github.run_number }}'
-          echo "some data for the file" >> version-config.js
+          echo "dockerImage: ${dockerImage}"
+          echo "some data for the file" >> ./version-config.js
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
