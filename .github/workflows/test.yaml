@@ -82,6 +82,7 @@ jobs:
          echo "Repo: ${{ github.repository }}"
          echo "actor: ${{ github.actor  }}"
          echo "myValue=${{ github.repository }}-${{ github.actor  }}" >> $GITHUB_ENV
+         echo "Printing Branhc name: ${{ github.ref_name }}"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
