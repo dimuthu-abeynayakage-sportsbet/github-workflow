@@ -51,14 +51,6 @@ jobs:
           echo "github.run_number: ${{ github.run_number }}"
           dockerImage="${{ github.run_id }}${{ github.run_number }}"
           echo "dockerImage1: ${dockerImage}"
-          git config --global user.name 'GitHub Actions'
-          cat ./version-config.js
-          echo "var dockerImageTag = '${dockerImage}';" > ./version-config.js
-          echo "After Change"
-          cat ./version-config.js
-          git add ./version-config.js
-          git commit -m "Change Docker Version"
-          git push
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
