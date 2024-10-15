@@ -2,16 +2,16 @@ name: Test Actions
 on: 
   push:
   workflow_dispatch:
-    inputs:
-      server_name:
-        description: The server where you wish to deploy & test your code.
-        required: true
-        type: choice
-        options:
-        - server_1
-        - server_2
-        - server_3
-        - server_4
+    #inputs:
+      #server_name:
+      #  description: The server where you wish to deploy & test your code.
+      #  required: true
+      #  type: choice
+      #  options:
+      #  - server_1
+      #  - server_2
+      #  - server_3
+      #  - server_4
 
 env:
   #STACK_PREFIX: 'dka'
