@@ -11,12 +11,13 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          echo "matrix={\"include\": [{\"os\": \"ubuntu-latest\", \"node\": \"20\"}]}" >> "$GITHUB_OUTPUT"
+         # echo "matrix={\"include\": [{\"os\": \"ubuntu-latest\", \"node\": \"20\"}]}" >> "$GITHUB_OUTPUT"
+         echo "matrix={\"include\": [{\"name\": \"dka\", \"age\": \"20\"}, {\"name\": \"abc\", \"age\": \"50\"}]}" >> "$GITHUB_OUTPUT"
 
   test:
     needs: build
     strategy:
       matrix: ${{fromJson(needs.build.outputs.matrix)}}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
-      - run: echo "os  -> ${{ matrix.os }}, os  -> ${{ matrix.node }}"
+      - run: echo "name  -> ${{ matrix.name }}, age -> ${{ matrix.age }}"
