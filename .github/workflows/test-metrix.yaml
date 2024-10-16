@@ -16,6 +16,7 @@ jobs:
 
   test:
     needs: build
+    environment: sp-prd
     strategy:
       matrix: ${{fromJson(needs.build.outputs.matrix)}}
     runs-on: ubuntu-latest
