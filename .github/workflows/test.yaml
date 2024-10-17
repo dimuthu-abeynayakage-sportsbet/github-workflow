@@ -1,6 +1,6 @@
 name: Test Actions
 on: 
- # push:
+  push:
   workflow_dispatch:
     inputs:
       server_name:
@@ -60,7 +60,7 @@ jobs:
           echo "dkaValue: ${dkaValue2}"
           jStatus=${{ job.status}}
            echo "jStatus: ${jStatus}"
-           passed=$([ "$job.status" == "success" ] && echo "PAssssss" || echo "Fail")
+           passed=$([ $job.status == success ] && echo "PAssssss" || echo "Fail")
            echo "dkaValue3New: ${passed}"
 
       - run: |
