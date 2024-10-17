@@ -60,7 +60,8 @@ jobs:
           echo "dkaValue: ${dkaValue2}"
           jStatus=${{ job.status}}
            echo "jStatus: ${jStatus}"
-           echo "dkaValue3New: ${{ job.status == '' }}"
+           passed=$([ job.status == 'success' ] && echo "PAssssss" || echo "Fail")
+           echo "dkaValue3New: ${passed}"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
