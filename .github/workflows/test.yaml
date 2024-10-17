@@ -51,10 +51,13 @@ jobs:
           echo "github.run_number: ${{ github.run_number }}"
           dockerImage="${{ github.run_id }}${{ github.run_number }}"
           echo "dockerImage1: ${dockerImage}"
-          echo "server_name: ${{ inputs.server_name }}"
+          echo "server_name 1: ${{ inputs.server_name }}"
+          echo "server_name 2: ${{github.event.inputs.server_name }}"
           
-          dkaValue=$([ "$inputs.server_name" = "server_1" ] && echo "server_1" || echo "Other")
-          echo "dkaValue: ${dkaValue}"
+          dkaValue1=$([ "$inputs.server_name" = "server_1" ] && echo "server_1" || echo "Other")
+          dkaValue2=$([ github.event.inputs.server_name = "server_1" ] && echo "server_1" || echo "Other")
+          echo "dkaValue: ${dkaValue1}"
+          echo "dkaValue: ${dkaValue2}"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
