@@ -51,6 +51,7 @@ jobs:
           echo "github.run_number: ${{ github.run_number }}"
           dockerImage="${{ github.run_id }}${{ github.run_number }}"
           echo "dockerImage1: ${dockerImage}"
+          echo "DDDDDDDDDDDD - $([ inputs.server_name != 'server_1' ] && echo '111111' || echo '2222') "
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
