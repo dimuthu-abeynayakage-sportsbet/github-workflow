@@ -52,7 +52,9 @@ jobs:
           dockerImage="${{ github.run_id }}${{ github.run_number }}"
           echo "dockerImage1: ${dockerImage}"
           echo "server_name: ${{ inputs.server_name }}"
-          echo "DDDDDDDDDDDD - $([ inputs.server_name == 'server_1' ] && echo '111111' || echo '2222') "
+          
+          dkaValue=$([ inputs.server_name == "server_1" ] && echo "server_1" || echo "Other"
+          echo "dkaValue: ${dkaValue}"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
