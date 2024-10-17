@@ -62,7 +62,7 @@ jobs:
     if: contains(github.ref_nam, 'release/' )
     runs-on: ubuntu-latest
     steps:
-      - run: echo "DDDDDDDDDDDD"
+      - run: echo "DDDDDDDDDDDD - $([ inputs.server_name != 'server_1' ] && echo '111111' || echo '2222') "
           
   pre-deploy:
     runs-on: ubuntu-latest
