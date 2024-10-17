@@ -58,9 +58,9 @@ jobs:
           dkaValue2=$([ github.event.inputs.server_name = 'server_1' ] && echo "server_1" || echo "Other")
           echo "dkaValue: ${dkaValue1}"
           echo "dkaValue: ${dkaValue2}"
-          server_nameNew=${{ inputs.server_name }}
-          dkaValue3New=$([ "$server_nameNew" = "server_1" ] && echo "server_1" || echo "Other")
-           echo "dkaValue3New: ${dkaValue3New}"
+          jStatus=${{ job.status}}
+           echo "jStatus: ${jStatus}"
+           echo "dkaValue3New: ${{ job.status == '' }}"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
