@@ -58,6 +58,11 @@ jobs:
           echo "Values exclusive2 ${{ env.exclusive2 }}"
           echo "[Click](https://www.utctime.net/utc-to-aest-converter){:target='_blank'}" >> "$GITHUB_STEP_SUMMARY"
           
+  if-condition:
+    if: contains(github.ref_nam }}, 'release/' )
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "DDDDDDDDDDDD"
           
   pre-deploy:
     runs-on: ubuntu-latest
