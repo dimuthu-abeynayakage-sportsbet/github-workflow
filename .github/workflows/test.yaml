@@ -59,7 +59,7 @@ jobs:
           echo "[Click](https://www.utctime.net/utc-to-aest-converter){:target='_blank'}" >> "$GITHUB_STEP_SUMMARY"
           
   if-condition:
-    if: contains(github.ref_nam }}, 'release/' )
+    if: contains(github.ref_nam, 'release/' )
     runs-on: ubuntu-latest
     steps:
       - run: echo "DDDDDDDDDDDD"
