@@ -53,7 +53,7 @@ jobs:
           echo "dockerImage1: ${dockerImage}"
           echo "server_name: ${{ inputs.server_name }}"
           
-          dkaValue=$([ inputs.server_name == "server_1" ] && echo "server_1" || echo "Other")
+          dkaValue=$([ "$inputs.server_name" == "server_1" ] && echo "server_1" || echo "Other")
           echo "dkaValue: ${dkaValue}"
 
       - run: |
