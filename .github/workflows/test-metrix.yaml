@@ -1,4 +1,4 @@
-name: Common Workflow
+name: Matrix Workflow
 
 on:
   push:
@@ -11,8 +11,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-         # echo "matrix={\"include\": [{\"os\": \"ubuntu-latest\", \"node\": \"20\"}]}" >> "$GITHUB_OUTPUT"
-         echo "matrix={\"include\": [{\"name\": \"dka\", \"age\": \"20\"}, {\"name\": \"abc\", \"age\": \"50\"}]}" >> "$GITHUB_OUTPUT"
+         echo "matrix={\"include\": [{\"name\": \"ABC\", \"age\": \"20\"}, {\"name\": \"PQR\", \"age\": \"50\"}]}" >> "$GITHUB_OUTPUT"
 
   test:
     needs: build
