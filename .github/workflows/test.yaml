@@ -1,6 +1,6 @@
 name: Test Actions
 on: 
-  push:
+ # push:
   workflow_dispatch:
     inputs:
       server_name:
@@ -51,13 +51,15 @@ jobs:
           echo "github.run_number: ${{ github.run_number }}"
           dockerImage="${{ github.run_id }}${{ github.run_number }}"
           echo "dockerImage1: ${dockerImage}"
-          echo "server_name 1: ${{ inputs.server_name }}"
-          echo "server_name 2: ${{github.event.inputs.server_name }}"
+          echo "server_name 1: (${{ inputs.server_name }})"
+          echo "server_name 2: (${{github.event.inputs.server_name }})"
           
           dkaValue1=$([ "$inputs.server_name" = "server_1" ] && echo "server_1" || echo "Other")
           dkaValue2=$([ github.event.inputs.server_name = 'server_1' ] && echo "server_1" || echo "Other")
           echo "dkaValue: ${dkaValue1}"
           echo "dkaValue: ${dkaValue2}"
+          dkaValue3=${{ inputs.server_name > 'server_1' && "server_1" || "Other"
+           echo "dkaValue3: ${dkaValue3}"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
