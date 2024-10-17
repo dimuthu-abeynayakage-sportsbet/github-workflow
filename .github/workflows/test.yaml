@@ -58,8 +58,9 @@ jobs:
           dkaValue2=$([ github.event.inputs.server_name = 'server_1' ] && echo "server_1" || echo "Other")
           echo "dkaValue: ${dkaValue1}"
           echo "dkaValue: ${dkaValue2}"
-          dkaValue3=${{ inputs.server_name > 'server_1' && "server_1" || "Other" }}
-           echo "dkaValue3: ${dkaValue3}"
+          server_nameNew=${{ inputs.server_name }}
+          dkaValue3New=$([ "$server_nameNew" = "server_1" ] && echo "server_1" || echo "Other")
+           echo "dkaValue3New: ${dkaValue3New}"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
