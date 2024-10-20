@@ -1,5 +1,5 @@
-name: Build 🔨
-run-name: "build"
+name: Automated Test 🔨
+run-name: "Automated Test"
 on:
   workflow_dispatch:
     inputs:
