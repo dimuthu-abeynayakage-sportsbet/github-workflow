@@ -85,13 +85,8 @@ jobs:
            configData="cert:cert s3:s3 api:api all:cert,s3,api"
            selection=${{ inputs.STACK }}
 
-           if [ ${{ inputs.STACK }} = 'all' ]; then
-               configStacks="cert,s3,api"
-                echo "Configuration: cert,s3,api"
-            else
-              configStacks="${{ inputs.STACK }}"
-              echo "Configuration: $selection"
-            fi
+          configStacks=$([  ${{ inputs.STACK }} = 'all' ] && echo "cert,s3,api" || echo " ${{ inputs.STACK }}")
+          echo "configStacks: $configStacks"
 
           IFS=',' read -r -a stacks <<< "$configStacks"
 
