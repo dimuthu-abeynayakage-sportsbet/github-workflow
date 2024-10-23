@@ -73,6 +73,10 @@ jobs:
            echo "jStatus: ${jStatus}"
            passed=$([ $job.status == success ] && echo "PAssssss" || echo "Fail")
            echo "dkaValue3New: ${passed}"
+           configData="cert:cert s3:s3 api:api all:cert,s3,api"
+           selection="all"
+           configMatches=$(echo $configData | awk -F$selection '{print $2}' | awk '{print $1}')
+           echo "configMatches: $configMatches"
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
