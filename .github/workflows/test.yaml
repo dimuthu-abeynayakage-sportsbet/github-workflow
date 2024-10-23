@@ -88,6 +88,7 @@ jobs:
            echo "selection: $selection"
            echo "configMatches: $configMatches"
            echo "configData: $configData"
+           configMatches=$(echo $configData | awk -F'all' '{print $2}' | awk '{print $1}')
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
