@@ -84,12 +84,12 @@ jobs:
            echo "dkaValue3New: ${passed}"
            configData="cert:cert s3:s3 api:api all:cert,s3,api"
            selection=${{ env.STACK }}
-           configMatches=$(echo $configData | awk -F$selection '{print $2}' | awk '{print $1}')
-           echo "selection: $selection"
-           echo "configMatches: $configMatches"
-           echo "configData: $configData"
-           configMatches1=$(echo $configData | awk -F'api' '{print $2}' | awk '{print $1}')
-           echo "configMatches123456: $configMatches1"
+           
+            if [ $selection = 'all' ]; then
+                echo "Configuration: cert,s3,api"
+            else
+              echo "Configuration: $selection"
+            fi
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
