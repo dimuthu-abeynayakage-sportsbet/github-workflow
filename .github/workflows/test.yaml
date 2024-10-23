@@ -85,6 +85,7 @@ jobs:
            configData="cert:cert s3:s3 api:api all:cert,s3,api"
            selection="${{ env.STACK }}"
            configMatches=$(echo $configData | awk -F$selection '{print $2}' | awk '{print $1}')
+           echo "selection: $selection"
            echo "configMatches: $configMatches"
 
       - run: |
