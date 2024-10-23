@@ -85,7 +85,7 @@ jobs:
            configData="cert:cert s3:s3 api:api all:cert,s3,api"
            selection=${{ env.STACK }}
            
-            if [ $selection = 'all' ]; then
+             if [[ '${{ env.STACK }}' = 'all' ]]; then
                 echo "Configuration: cert,s3,api"
             else
               echo "Configuration: $selection"
