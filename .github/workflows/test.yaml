@@ -83,13 +83,23 @@ jobs:
            passed=$([ $job.status == success ] && echo "PAssssss" || echo "Fail")
            echo "dkaValue3New: ${passed}"
            configData="cert:cert s3:s3 api:api all:cert,s3,api"
-           selection=${{ env.STACK }}
+           selection=${{ inputs.STACK }}
 
            if [ ${{ inputs.STACK }} = 'all' ]; then
+               configStacks="cert,s3,api"
                 echo "Configuration: cert,s3,api"
             else
+              configStacks="${{ inputs.STACK }}"
               echo "Configuration: $selection"
             fi
+
+          IFS=',' read -r -a stacks <<< "$configStacks"
+
+          for element in "${stacks[@]}"
+          do
+              echo "Processing: $element"
+              # Add your processing logic here
+          done
 
       - run: |
           echo "myValue: ${{ env.myValue }}"
