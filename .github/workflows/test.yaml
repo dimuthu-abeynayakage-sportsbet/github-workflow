@@ -14,6 +14,15 @@ on:
       STACK_PREFIX:
         description: 'If you would like to create a personal stack, please specify the prefix. I.E.: hierarchy-cache-sp-dev-mystack-lambda'
         type: string
+      STACK:
+        description: 'Choose the stack to deploy'
+        type: choice
+        options:
+          - all
+          - cert
+          - s3
+          - api
+          - cf
 
 env:
   #STACK_PREFIX: 'dka'
@@ -74,7 +83,7 @@ jobs:
            passed=$([ $job.status == success ] && echo "PAssssss" || echo "Fail")
            echo "dkaValue3New: ${passed}"
            configData="cert:cert s3:s3 api:api all:cert,s3,api"
-           selection="all"
+           selection="${{ env.STACK }}"
            configMatches=$(echo $configData | awk -F$selection '{print $2}' | awk '{print $1}')
            echo "configMatches: $configMatches"
 
