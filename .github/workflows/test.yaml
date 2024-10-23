@@ -85,7 +85,7 @@ jobs:
            configData="cert:cert s3:s3 api:api all:cert,s3,api"
            selection=${{ inputs.STACK }}
 
-          configStacks=$([  ${{ inputs.STACK }} = 'all' ] && echo "cert,s3,api" || echo " ${{ inputs.STACK }}")
+          configStacks=$([  $selection = 'all' ] && echo "cert,s3,api" || echo "$selection")
           echo "configStacks: $configStacks"
 
           IFS=',' read -r -a stacks <<< "$configStacks"
