@@ -95,7 +95,7 @@ jobs:
               # Add your processing logic here
           done
       - name: Change Directory
-        working-directory: ./github/workflows
+        working-directory: ./.github/workflows
         run: pwd
 
       - run: |
