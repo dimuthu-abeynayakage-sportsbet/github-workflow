@@ -54,7 +54,7 @@ jobs:
           
       - name: Set Stack Parameters
         run: |
-
+          pwd  
           if [[ -z '${{ inputs.STACK_PREFIX }}' ]]; then
             echo "Empty"
           fi
@@ -94,8 +94,13 @@ jobs:
               echo "Processing: $element"
               # Add your processing logic here
           done
+      - name: Change Directory
+        working-directory: ./github/workflows_archived
+        run: pwd
 
       - run: |
+          echo "Now at"
+          pwd
           echo "myValue: ${{ env.myValue }}"
           echo "Values exclusive ${{ env.exclusive }}"
           echo "Values exclusive2 ${{ env.exclusive2 }}"
