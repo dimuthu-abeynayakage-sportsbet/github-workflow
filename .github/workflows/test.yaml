@@ -63,6 +63,7 @@ jobs:
           echo "Branch ${{ github.ref_name }}"
           echo "repository ${{ github.repository }}"
           echo "URL $GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+          echo "DKA Branch: ${{ github.head_ref }}"
 
           echo "Change ${branchName//p/-}"
           echo "github.sha: ${{ github.sha }}"
